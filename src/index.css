@@ -84,10 +84,56 @@
   --border: rgba(255, 255, 255, 0.1);
 }
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: var(--background);
   color: var(--foreground);
+}
+
+.font-script {
+  font-family: 'Pacifico', cursive !important;
+}
+
+.dashboard-bento-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  grid-template-areas:
+    "location location"
+    "location location"
+    "tools tools"
+    "favorite music"
+    "contact music"
+    "contact scratch"
+    "coffees github"
+    "hours github";
+}
+.dashboard-bento-grid > li {
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+@media (min-width: 700px) {
+  .dashboard-bento-grid {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    grid-template-rows: auto auto minmax(0, min-content) minmax(0, min-content);
+    grid-template-areas:
+      "location location location location scratch scratch github github coffees coffees"
+      "location location location location scratch scratch github github hours hours"
+      "music music music music music favorite favorite favorite contact contact"
+      "tools tools tools tools tools tools tools tools contact contact";
+  }
 }
 
 /* Left fade effect */
@@ -109,7 +155,7 @@ body {
   right: 0;
   width: 25%;
   height: 100%;
-  background: linear-gradient(to left, #0b0c10, transparent);
+  background: linear-gradient(to right, transparent, #0b0c10);
   pointer-events: none;
   z-index: 10;
 }

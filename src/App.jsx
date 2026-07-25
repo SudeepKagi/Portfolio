@@ -12,7 +12,7 @@ const BLUR_FADE_DELAY = 0.005;
 
 export default function App() {
   return (
-    <div className="relative min-h-screen w-full bg-background dark text-foreground">
+    <div className="relative min-h-screen w-full max-w-full overflow-x-hidden bg-background dark text-foreground">
       <Navbar navItems={data.nav} />
       <img
         src="/layout/background-ellipse3.svg"

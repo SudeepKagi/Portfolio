@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { IconTool, IconLink, IconCoffee, IconClockHour4, IconMapPin, IconHeart, IconHandClick, IconBrandGithub, IconBrandSpotifyFilled, IconRefresh } from "@tabler/icons-react";
 import { Globe } from "@/components/ui/globe";
-import styles from "./dashboard.module.css";
 import { NumberTicker } from "@/components/ui/number-ticker";
 import { Marquee } from "@/components/ui/marquee";
 import {
@@ -40,9 +39,9 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full overflow-hidden">
       <CustomCursor />
-      <ul className={`grid w-full gap-4 ${styles.dashboardGrid}`}>
+      <ul className="dashboard-bento-grid">
         <GridItem
           area="location"
           icon={<IconMapPin className={dashboardIconClass} />}
@@ -201,7 +200,7 @@ const GridItem = ({ area, icon, title, children, transitionDuration = "300ms", t
     <li
       ref={itemRef}
       data-cursor-emoji={cursorEmoji}
-      className="min-h-[2rem] w-full list-none transition-all"
+      className="min-h-[2rem] w-full list-none transition-all p-0 m-0"
       style={{
         gridArea: area,
         transitionDuration,

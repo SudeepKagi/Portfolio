@@ -49,7 +49,7 @@ export function AnimatedName({
   const measureSpans = (
     <>
       <span ref={yRef} aria-hidden="true" className={measureClass}>
-        ep
+        eep
       </span>
       <span ref={amRef} aria-hidden="true" className={measureClass}>
         eep Kagi
@@ -92,7 +92,7 @@ export function AnimatedName({
 
   return (
     <span className={cn("inline-block", className)}>
-      Sud
+      <span className={GRADIENT_TEXT}>Sud</span>
       <motion.span
         key={phase}
         {...slotMotionProps}
