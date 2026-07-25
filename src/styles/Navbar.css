@@ -1,0 +1,124 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+  background: rgba(7, 7, 17, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+  padding: 0.75rem 2rem;
+}
+
+/* Logo */
+.navbar-logo {
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  cursor: default;
+}
+
+.logo-letter {
+  color: var(--accent);
+}
+
+.logo-dot {
+  color: var(--text-muted);
+}
+
+/* Center dock */
+.navbar-dock {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(15, 15, 30, 0.8);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  border-radius: 99px;
+  padding: 0.4rem 0.75rem;
+  backdrop-filter: blur(12px);
+}
+
+.dock-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.dock-item:hover {
+  color: var(--text);
+  background: rgba(99, 102, 241, 0.15);
+  transform: translateY(-2px);
+}
+
+.dock-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dock-tooltip {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 15, 30, 0.95);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  color: var(--text);
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: fadeUp 0.15s ease;
+}
+
+/* Right side */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-github-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 99px;
+  transition: all 0.2s ease;
+}
+
+.nav-github-btn:hover {
+  color: var(--text);
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+@media (max-width: 640px) {
+  .navbar-logo { display: none; }
+  .navbar-right { display: none; }
+  .navbar { justify-content: center; }
+}

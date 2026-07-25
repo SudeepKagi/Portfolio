@@ -9,8 +9,9 @@ const Globe = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    canvas.width = 200;
-    canvas.height = 200;
+    const size = Math.min(canvas.parentElement?.offsetWidth || 200, 200);
+    canvas.width = size;
+    canvas.height = size;
 
     let angle = 0;
     let animId;
@@ -36,11 +37,11 @@ const Globe = () => {
     };
 
     const draw = () => {
-      ctx.clearRect(0, 0, 200, 200);
-      const cx = 100, cy = 100, r = 80;
+      ctx.clearRect(0, 0, size, size);
+      const cx = size / 2, cy = size / 2, r = size * 0.4;
 
       // Globe outline
-      const grad = ctx.createRadialGradient(90, 90, 10, 100, 100, 85);
+      const grad = ctx.createRadialGradient(cx * 0.9, cy * 0.9, r * 0.1, cx, cy, r * 1.05);
       grad.addColorStop(0, 'rgba(99, 102, 241, 0.12)');
       grad.addColorStop(1, 'rgba(99, 102, 241, 0.02)');
       ctx.beginPath();
@@ -95,7 +96,7 @@ const Globe = () => {
     return () => cancelAnimationFrame(animId);
   }, []);
 
-  return <canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} />;
+  return <canvas ref={canvasRef} style={{ width: '200px', height: '200px', display: 'block', margin: '0 auto' }} />;
 };
 
 // GitHub-style heatmap (simulated)
