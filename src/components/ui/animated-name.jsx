@@ -18,15 +18,15 @@ export function AnimatedName({
   onExitComplete,
   className,
 }) {
-  const yRef = useRef(null);
-  const amRef = useRef(null);
+  const deepRef = useRef(null);
+  const peedRef = useRef(null);
   const [widths, setWidths] = useState(null);
 
   useLayoutEffect(() => {
     const measure = () => {
-      const y = yRef.current?.getBoundingClientRect().width;
-      const am = amRef.current?.getBoundingClientRect().width;
-      if (y && am) setWidths({ y, am });
+      const deep = deepRef.current?.getBoundingClientRect().width;
+      const peed = peedRef.current?.getBoundingClientRect().width;
+      if (deep && peed) setWidths({ deep, peed });
     };
     measure();
     window.addEventListener("resize", measure);
@@ -36,9 +36,9 @@ export function AnimatedName({
   useEffect(() => {
     if (!document.fonts?.ready) return;
     document.fonts.ready.then(() => {
-      const y = yRef.current?.getBoundingClientRect().width;
-      const am = amRef.current?.getBoundingClientRect().width;
-      if (y && am) setWidths({ y, am });
+      const deep = deepRef.current?.getBoundingClientRect().width;
+      const peed = peedRef.current?.getBoundingClientRect().width;
+      if (deep && peed) setWidths({ deep, peed });
     });
   }, []);
 
@@ -48,11 +48,11 @@ export function AnimatedName({
   );
   const measureSpans = (
     <>
-      <span ref={yRef} aria-hidden="true" className={measureClass}>
-        eep
+      <span ref={deepRef} aria-hidden="true" className={measureClass}>
+        deep
       </span>
-      <span ref={amRef} aria-hidden="true" className={measureClass}>
-        eep Kagi
+      <span ref={peedRef} aria-hidden="true" className={measureClass}>
+        peed
       </span>
     </>
   );
@@ -92,7 +92,7 @@ export function AnimatedName({
 
   return (
     <span className={cn("inline-block", className)}>
-      <span className={GRADIENT_TEXT}>Sud</span>
+      Su
       <motion.span
         key={phase}
         {...slotMotionProps}

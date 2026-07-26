@@ -12,6 +12,7 @@ export const ScratchToReveal = ({
   gradientColors = ["#A97CF8", "#F38CB8", "#FDCC92"],
   resetKey,
 }) => {
+  const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const [isScratching, setIsScratching] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -20,28 +21,32 @@ export const ScratchToReveal = ({
 
   const initializeCanvas = () => {
     const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
-    if (canvas && ctx) {
-      ctx.globalCompositeOperation = "source-over";
-      ctx.fillStyle = "#ccc";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      const gradient = ctx.createLinearGradient(
-        0,
-        0,
-        canvas.width,
-        canvas.height,
-      );
-      gradient.addColorStop(0, gradientColors[0]);
-      gradient.addColorStop(0.5, gradientColors[1]);
-      gradient.addColorStop(1, gradientColors[2]);
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const container = containerRef.current;
+    if (canvas && container) {
+      const rect = container.getBoundingClientRect();
+      const w = width || Math.round(rect.width) || 300;
+      const h = height || Math.round(rect.height) || 150;
+      canvas.width = w;
+      canvas.height = h;
+
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.globalCompositeOperation = "source-over";
+        ctx.fillStyle = "#ccc";
+        ctx.fillRect(0, 0, w, h);
+        const gradient = ctx.createLinearGradient(0, 0, w, h);
+        gradient.addColorStop(0, gradientColors[0]);
+        gradient.addColorStop(0.5, gradientColors[1]);
+        gradient.addColorStop(1, gradientColors[2]);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, w, h);
+      }
     }
   };
 
   useEffect(() => {
     initializeCanvas();
-  }, [gradientColors]);
+  }, [gradientColors, width, height]);
 
   useEffect(() => {
     setIsComplete(false);
@@ -57,7 +62,7 @@ export const ScratchToReveal = ({
     const handleDocumentTouchMove = (event) => {
       if (!isScratching) return;
       const touch = event.touches[0];
-      scratch(touch.clientX, touch.clientY);
+      if (touch) scratch(touch.clientX, touch.clientY);
     };
 
     const handleDocumentMouseUp = () => {
@@ -89,16 +94,24 @@ export const ScratchToReveal = ({
     };
   }, [isScratching]);
 
-  const handleMouseDown = () => setIsScratching(true);
-  const handleTouchStart = () => setIsScratching(true);
+  const handleMouseDown = (e) => {
+    setIsScratching(true);
+    scratch(e.clientX, e.clientY);
+  };
+  const handleTouchStart = (e) => {
+    setIsScratching(true);
+    if (e.touches[0]) scratch(e.touches[0].clientX, e.touches[0].clientY);
+  };
 
   const scratch = (clientX, clientY) => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     if (canvas && ctx) {
       const rect = canvas.getBoundingClientRect();
-      const x = clientX - rect.left + 16;
-      const y = clientY - rect.top + 16;
+      const scaleX = canvas.width / (rect.width || 1);
+      const scaleY = canvas.height / (rect.height || 1);
+      const x = (clientX - rect.left) * scaleX;
+      const y = (clientY - rect.top) * scaleY;
       ctx.globalCompositeOperation = "destination-out";
       ctx.beginPath();
       ctx.arc(x, y, 30, 0, Math.PI * 2);
@@ -123,7 +136,7 @@ export const ScratchToReveal = ({
 
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
-    if (canvas && ctx) {
+    if (canvas && ctx && canvas.width > 0 && canvas.height > 0) {
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const pixels = imageData.data;
       const totalPixels = pixels.length / 4;
@@ -145,7 +158,8 @@ export const ScratchToReveal = ({
 
   return (
     <motion.div
-      className={cn("relative select-none touch-none", className)}
+      ref={containerRef}
+      className={cn("relative select-none touch-none w-full h-full", className)}
       style={{
         width,
         height,
@@ -156,9 +170,7 @@ export const ScratchToReveal = ({
     >
       <canvas
         ref={canvasRef}
-        width={width}
-        height={height}
-        className="absolute left-0 top-0"
+        className="absolute left-0 top-0 w-full h-full rounded-md"
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
       ></canvas>

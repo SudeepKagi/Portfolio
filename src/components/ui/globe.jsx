@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 
 const MOVEMENT_DAMPING = 1400;
 
-const BENGALURU = { lat: 12.9716, lng: 77.5946 };
-const SAN_FRANCISCO = { lat: 37.7749, lng: -122.4194 };
+const BOSTON = { lat: 42.3601, lng: -71.0589 };
+const MENLO = { lat: 37.453, lng: -122.1817 };
 const AMBER = "rgb(245, 158, 11)";
 const GREEN = "rgb(34, 197, 94)";
 
@@ -105,8 +105,8 @@ export function Globe({
       };
     };
 
-    const v1 = toVec(BENGALURU.lat, BENGALURU.lng);
-    const v2 = toVec(SAN_FRANCISCO.lat, SAN_FRANCISCO.lng);
+    const v1 = toVec(BOSTON.lat, BOSTON.lng);
+    const v2 = toVec(MENLO.lat, MENLO.lng);
     const dotProd = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
     const omega = Math.acos(Math.max(-1, Math.min(1, dotProd)));
     const sinOmega = Math.sin(omega);
@@ -182,7 +182,7 @@ export function Globe({
         const b = projected[i + 1];
         const zAvg = (a.z + b.z) / 2;
         if (zAvg < -0.05) continue;
-        const alpha = Math.max(0, Math.min(0.6, (zAvg + 0.05) / 0.6 * 0.6));
+        const alpha = Math.max(0, Math.min(0.6, ((zAvg + 0.05) / 0.6) * 0.6));
         ctx.strokeStyle = `rgba(${lineRgb}, ${alpha})`;
         ctx.beginPath();
         ctx.moveTo(a.sx, a.sy);
@@ -196,7 +196,10 @@ export function Globe({
         for (let i = 0; i < trailLength; i++) {
           const t = beamProgress - i * 0.018;
           if (t < 0 || t > 1) continue;
-          const idx = Math.min(projected.length - 1, Math.floor(t * (projected.length - 1)));
+          const idx = Math.min(
+            projected.length - 1,
+            Math.floor(t * (projected.length - 1))
+          );
           const p = projected[idx];
           if (p.z < -0.05) continue;
           const fade = 1 - i / trailLength;
@@ -233,8 +236,8 @@ export function Globe({
         ctx.globalAlpha = 1;
       };
 
-      drawDot(BENGALURU.lat, BENGALURU.lng, AMBER);
-      drawDot(SAN_FRANCISCO.lat, SAN_FRANCISCO.lng, GREEN);
+      drawDot(BOSTON.lat, BOSTON.lng, AMBER);
+      drawDot(MENLO.lat, MENLO.lng, GREEN);
 
       overlayAnimId = requestAnimationFrame(drawOverlay);
     };
@@ -243,7 +246,7 @@ export function Globe({
 
     return () => {
       cancelAnimationFrame(overlayAnimId);
-      globe.destroy();
+      if (globe) globe.destroy();
       window.removeEventListener("resize", onResize);
     };
   }, [rs, globeConfig]);
@@ -252,13 +255,11 @@ export function Globe({
     <div
       className={cn(
         "absolute inset-0 mt-8 mx-auto aspect-[1/1] w-full max-w-[450px]",
-        className,
+        className
       )}
     >
       <canvas
-        className={cn(
-          "size-full opacity-0 transition-opacity duration-500 [contain:layout_paint_size]",
-        )}
+        className="size-full opacity-0 transition-opacity duration-500 [contain:layout_paint_size]"
         ref={canvasRef}
         onPointerDown={(e) => {
           pointerInteracting.current = e.clientX;

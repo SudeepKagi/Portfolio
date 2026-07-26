@@ -1,7 +1,8 @@
 .dashboardGrid {
   display: grid;
-  width: 100%;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;           /* Fills the parent container */
+  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
   grid-template-rows: auto auto auto auto auto auto auto auto;
   grid-template-areas:
     "location location"
@@ -14,13 +15,11 @@
     "hours github";
 }
 .dashboardGrid > li {
-  min-width: 0;
-  width: 100%;
-  box-sizing: border-box;
+  min-width: 0; /* Allow grid items to shrink */
 }
 @media (min-width: 700px) {
   .dashboardGrid {
-    grid-template-columns: repeat(10, minmax(0, 1fr));
+    grid-template-columns: repeat(10, 1fr);
     grid-template-rows: auto auto minmax(0, min-content) minmax(0, min-content);
     grid-template-areas:
       "location location location location scratch scratch github github coffees coffees"

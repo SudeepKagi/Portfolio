@@ -22,7 +22,7 @@ import { data } from "@/data/data";
 export default function Hero() {
   const [wiggleIcon, setWiggleIcon] = useState(null);
   const [phase, setPhase] = useState("initial");
-  const [suffix, setSuffix] = useState("eep");
+  const [suffix, setSuffix] = useState("deep");
 
   useEffect(() => {
     let timer;
@@ -39,11 +39,9 @@ export default function Hero() {
   }, [phase]);
 
   const handleExitComplete = () => {
-    setSuffix((s) => (s === "eep" ? "eep Kagi" : "eep"));
+    setSuffix((s) => (s === "deep" ? "peed" : "deep"));
     setPhase("enter");
   };
-
-  const { status, dotColor } = getStatus();
 
   const handleIconClick = (iconName) => {
     setWiggleIcon(iconName);
@@ -70,37 +68,29 @@ export default function Hero() {
         <BlurFade delay={0.005} inView>
           <div className="relative flex-col space-y-1">
             <div className="relative flex flex-col items-center justify-center">
-              <BackgroundGradient className="z-50 h-16 w-16 sm:w-20 sm:h-20 md:w-20 md:h-20">
+              <BackgroundGradient className="z-50 h-24 w-24 sm:w-28 sm:h-28 md:w-32 md:h-32">
                 <img
-                  src="/profile-bw.jpg"
+                  src="/photo.jpg"
                   alt="Profile Picture"
-                  className="absolute rounded-full transition-opacity duration-200 opacity-100 group-hover:opacity-0 w-full h-full object-cover"
+                  className="absolute rounded-full transition-all duration-500 ease-in-out opacity-100 group-hover:opacity-0 w-full h-full object-cover grayscale contrast-100"
                 />
                 <img
-                  src="/profile-color.jpg"
+                  src="/photo.jpg"
                   alt="Profile Picture Hover"
-                  className="absolute rounded-full transition-opacity duration-200 opacity-0 group-hover:opacity-100 w-full h-full object-cover"
+                  className="absolute rounded-full transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100 w-full h-full object-cover saturate-105 contrast-100"
                 />
               </BackgroundGradient>
               <ShimmerButton onClick={handleShimmerButtonClick} className="z-50 mt-8">
                 <div className="z-50 relative flex items-center justify-center">
                   <div
-                    className={`absolute h-1.5 w-1.5 rounded-full border-1 ${
-                      dotColor === "green"
-                        ? "border-green-600/80 bg-green-500 animate-ping"
-                        : "border-orange-600/80 bg-orange-500 animate-ping"
-                    } mr-2`}
+                    className="absolute h-1.5 w-1.5 rounded-full border-1 border-green-600/80 bg-green-500 animate-ping mr-2"
                   ></div>
                   <div
-                    className={`relative h-1 w-1 rounded-full border-1 ${
-                      dotColor === "green"
-                        ? "border-green-600/80 bg-green-500 animate-pulse"
-                        : "border-orange-600/80 bg-orange-500 animate-pulse"
-                    } mr-2`}
+                    className="relative h-1 w-1 rounded-full border-1 border-green-600/80 bg-green-500 animate-pulse mr-2"
                   ></div>
                 </div>
-                <span className="whitespace-pre-wrap text-center font-semibold leading-none text-muted-foreground text-xs sm:text-base py-[0.5]">
-                  {status}
+                <span className="whitespace-pre-wrap text-center font-semibold leading-none text-zinc-300 dark:text-zinc-300 text-xs sm:text-sm py-0.5">
+                  Available
                 </span>
               </ShimmerButton>
             </div>
@@ -156,16 +146,6 @@ export default function Hero() {
     </div>
   );
 }
-
-const getStatus = () => {
-  const now = new Date();
-  const currentHour = now.getHours();
-  if (currentHour >= 8 && currentHour < 23) {
-    return { status: "Available", dotColor: "green" };
-  } else {
-    return { status: "Away", dotColor: "amber" };
-  }
-};
 
 const iconClass = (label, wiggleIcon) =>
   `text-secondary-foreground ${

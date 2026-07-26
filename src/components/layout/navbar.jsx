@@ -6,8 +6,10 @@ import {
   useMotionValueEvent,
 } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { ModeToggle } from "@/components/theme-toggle";
 import { AnimatedLogo } from "@/components/ui/logo-animation";
-import { IconBrandGithub, IconStar, IconSearch, IconSun, IconMoon } from "@tabler/icons-react";
+import { CommandPaletteButton } from "@/components/command-palette/command-palette-button";
+import { IconBrandGithub, IconStar } from "@tabler/icons-react";
 
 export const Navbar = ({
   navItems,
@@ -65,10 +67,11 @@ export const Navbar = ({
             duration: 0.2,
           }}
           className={cn(
-            "flex sm:max-w-5xl w-full justify-self-center backdrop-blur-lg fixed top-0 sm:top-4 inset-x-0 mx-auto md:rounded-lg bg-background/20 z-[5000] pr-4 pl-6 py-4 items-center justify-between border border-border/40",
+            "flex max-w-5xl w-full justify-self-center fixed top-0 sm:top-4 inset-x-0 mx-auto md:rounded-lg bg-zinc-950/25 sm:bg-zinc-950/20 backdrop-blur-lg border-none z-[5000] px-4 py-3 sm:py-4 items-center justify-between",
             className
           )}
         >
+          {/* Logo on the left */}
           <div className="flex items-center mr-4 sm:mr-16 cursor-pointer" onClick={handleLogoClick}>
             {mounted && (
               <AnimatedLogo
@@ -79,13 +82,14 @@ export const Navbar = ({
             )}
           </div>
 
+          {/* Links in the center */}
           <div className="flex items-center gap-3 sm:gap-6 ml-auto mr-0 sm:mr-4">
             {navItems.map((navItem, idx) => (
               <button
                 key={`link=${idx}`}
                 onClick={() => handleNavClick(navItem.link)}
                 className={cn(
-                  "relative font-semibold text-muted-foreground items-center flex space-x-1 hover:text-white transition-colors duration-300"
+                  "relative font-semibold text-zinc-400 hover:text-white items-center flex space-x-1 transition-colors duration-300"
                 )}
               >
                 <span className="block sm:hidden">{navItem.icon}</span>
@@ -94,21 +98,23 @@ export const Navbar = ({
             ))}
             <span
               aria-hidden
-              className="h-5 w-px self-center bg-zinc-700/60"
+              className="h-5 w-px self-center bg-zinc-800"
             />
             <a
               href="https://github.com/SudeepKagi/Portfolio"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Star this site on GitHub"
-              className="group inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-background/40 hover:bg-background/70 hover:border-border px-2.5 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Star this site on GitHub (9 stars)"
+              className="group inline-flex items-center gap-1.5 rounded-md border-none bg-zinc-900/50 hover:bg-zinc-800/80 px-2.5 py-1 text-xs text-zinc-400 hover:text-white transition-colors"
             >
-              <IconBrandGithub className="h-3.5 w-3.5" />
+              <IconBrandGithub className="h-3.5 w-3.5 text-zinc-400 group-hover:text-white" />
               <span className="flex items-center gap-0.5 tabular-nums">
                 <IconStar className="h-3 w-3 transition-colors group-hover:text-amber-400 group-hover:animate-spin-grow" />
-                12
+                9
               </span>
             </a>
+            <CommandPaletteButton />
+            <ModeToggle />
           </div>
         </motion.div>
       )}

@@ -17,7 +17,7 @@ export default function App() {
       <img
         src="/layout/background-ellipse3.svg"
         alt=""
-        className="z-1 blur-lg absolute max-w-5xl top-0 left-1/2 transform -translate-x-1/2 -translate-y-5/9 w-full pointer-events-none select-none opacity-40"
+        className="z-1 blur-lg absolute max-w-5xl top-0 left-1/2 transform -translate-x-1/2 -translate-y-5/9 w-full pointer-events-none select-none"
         aria-hidden="true"
       />
       <div className="mx-auto flex max-w-5xl flex-col space-y-12 sm:space-y-32 px-4">
