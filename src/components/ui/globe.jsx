@@ -1,6 +1,6 @@
 import createGlobe from "cobe";
 import { useMotionValue, useSpring } from "framer-motion";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 const MOVEMENT_DAMPING = 1400;
@@ -8,36 +8,16 @@ const MOVEMENT_DAMPING = 1400;
 const CURRENT_LOCATION = { lat: 12.9716, lng: 77.5946 };
 const GREEN = "rgb(34, 197, 94)";
 
-// Convert longitude to initial phi angle in radians so Bengaluru faces front
+// Initial phi so Bengaluru faces the viewer on first render
 const BENGALURU_PHI = (CURRENT_LOCATION.lng * Math.PI) / 180 - 0.2;
 
-const GLOBE_CONFIG = {
-  width: 800,
-  height: 800,
-  onRender: () => {},
-  devicePixelRatio: 2,
-  phi: BENGALURU_PHI,
-  theta: 0.35,
-  dark: 1,
-  diffuse: 1.2,
-  mapSamples: 16000,
-  mapBrightness: 6,
-  baseColor: [0.3, 0.3, 0.35],
-  markerColor: [0.1, 0.8, 0.3],
-  glowColor: [0.15, 0.15, 0.15],
-  markers: [
-    { location: [CURRENT_LOCATION.lat, CURRENT_LOCATION.lng], size: 0.08 }
-  ],
-};
-
-export function Globe({
-  className,
-  config = GLOBE_CONFIG,
-}) {
+export function Globe({ className }) {
   const canvasRef = useRef(null);
   const overlayRef = useRef(null);
   const pointerInteracting = useRef(null);
   const pointerInteractionMovement = useRef(0);
+  // Guard against StrictMode double-invocation: track active globe instance
+  const globeInstanceRef = useRef(null);
 
   const r = useMotionValue(0);
   const rs = useSpring(r, {
@@ -45,19 +25,6 @@ export function Globe({
     damping: 50,
     stiffness: 500,
   });
-
-  const globeConfig = useMemo(() => ({
-    ...config,
-    dark: 1,
-    diffuse: 1.2,
-    mapBrightness: 6,
-    baseColor: [0.3, 0.3, 0.35],
-    markerColor: [0.1, 0.8, 0.3],
-    glowColor: [0.15, 0.15, 0.15],
-    markers: [
-      { location: [CURRENT_LOCATION.lat, CURRENT_LOCATION.lng], size: 0.08 }
-    ],
-  }), [config]);
 
   const updatePointerInteraction = (value) => {
     pointerInteracting.current = value;
@@ -72,41 +39,19 @@ export function Globe({
   };
 
   useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Prevent StrictMode double-init: destroy existing instance first
+    if (globeInstanceRef.current) {
+      globeInstanceRef.current.destroy();
+      globeInstanceRef.current = null;
+    }
+
     let phi = BENGALURU_PHI;
-    let width = canvasRef.current?.offsetWidth || 400;
     let currentPhi = BENGALURU_PHI;
     let overlayAnimId = 0;
-    const theta = globeConfig.theta ?? 0.35;
-
-    const onResize = () => {
-      if (canvasRef.current) {
-        width = canvasRef.current.offsetWidth || 400;
-      }
-    };
-
-    window.addEventListener("resize", onResize);
-    onResize();
-
-    const globe = createGlobe(canvasRef.current, {
-      ...globeConfig,
-      width: width * 2,
-      height: width * 2,
-      onRender: (state) => {
-        if (!pointerInteracting.current) phi += 0.003;
-        const currentWidth = canvasRef.current?.offsetWidth || width || 400;
-        width = currentWidth;
-        state.phi = phi + rs.get();
-        state.width = currentWidth * 2;
-        state.height = currentWidth * 2;
-        currentPhi = state.phi;
-      },
-    });
-
-    setTimeout(() => {
-      if (canvasRef.current) {
-        canvasRef.current.style.opacity = "1";
-      }
-    }, 0);
+    const theta = 0.35;
 
     const toVec = (lat, lng) => {
       const latR = (lat * Math.PI) / 180;
@@ -134,17 +79,81 @@ export function Globe({
       };
     };
 
+    const startGlobe = (width) => {
+      // Destroy any lingering instance before creating a new one
+      if (globeInstanceRef.current) {
+        globeInstanceRef.current.destroy();
+        globeInstanceRef.current = null;
+      }
+
+      const globe = createGlobe(canvas, {
+        width: width * 2,
+        height: width * 2,
+        devicePixelRatio: 2,
+        phi: BENGALURU_PHI,
+        theta: 0.35,
+        dark: 1,
+        diffuse: 0.5,
+        mapSamples: 22000,
+        mapBrightness: 1.2,
+        baseColor: [0.8, 0.9, 1.2],
+        markerColor: [0.1, 0.8, 0.3],
+        glowColor: [1, 1, 1],
+        markers: [
+          { location: [CURRENT_LOCATION.lat, CURRENT_LOCATION.lng], size: 0.08 },
+        ],
+        onRender: (state) => {
+          if (!pointerInteracting.current) phi += 0.003;
+          state.phi = phi + rs.get();
+          const w = canvas.offsetWidth;
+          state.width = w * 2;
+          state.height = w * 2;
+          currentPhi = state.phi;
+        },
+      });
+
+      globeInstanceRef.current = globe;
+      canvas.style.opacity = "1";
+    };
+
+    // Use ResizeObserver to wait for a non-zero canvas width before init
+    // This handles the case where the grid hasn't finished layout on mount
+    let initialized = false;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const width = entry.contentRect.width;
+        if (width > 0 && !initialized) {
+          initialized = true;
+          startGlobe(width);
+          break;
+        }
+      }
+    });
+    observer.observe(canvas);
+
+    // Also try immediately in case canvas is already sized
+    const immediateWidth = canvas.offsetWidth;
+    if (immediateWidth > 0 && !initialized) {
+      initialized = true;
+      startGlobe(immediateWidth);
+    }
+
     const drawOverlay = () => {
       const overlay = overlayRef.current;
-      if (!overlay || width === 0) {
+      if (!overlay) {
         overlayAnimId = requestAnimationFrame(drawOverlay);
         return;
       }
       const ctx = overlay.getContext("2d");
       if (!ctx) return;
 
+      const W = canvas.offsetWidth;
+      if (W === 0) {
+        overlayAnimId = requestAnimationFrame(drawOverlay);
+        return;
+      }
+
       const dpr = 2;
-      const W = width;
       if (overlay.width !== W * dpr) {
         overlay.width = W * dpr;
         overlay.height = W * dpr;
@@ -189,11 +198,15 @@ export function Globe({
     overlayAnimId = requestAnimationFrame(drawOverlay);
 
     return () => {
+      observer.disconnect();
       cancelAnimationFrame(overlayAnimId);
-      if (globe) globe.destroy();
-      window.removeEventListener("resize", onResize);
+      if (globeInstanceRef.current) {
+        globeInstanceRef.current.destroy();
+        globeInstanceRef.current = null;
+      }
     };
-  }, [rs, globeConfig]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty deps — we never want to re-run this; rs is stable
 
   return (
     <div
@@ -203,9 +216,7 @@ export function Globe({
       )}
     >
       <canvas
-        className={cn(
-          "size-full opacity-0 transition-opacity duration-500 [contain:layout_paint_size]"
-        )}
+        className="size-full opacity-0 transition-opacity duration-500 [contain:layout_paint_size]"
         ref={canvasRef}
         onPointerDown={(e) =>
           updatePointerInteraction(
