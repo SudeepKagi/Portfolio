@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 
 const MOVEMENT_DAMPING = 1400;
 
-const BOSTON = { lat: 42.3601, lng: -71.0589 };
-const MENLO = { lat: 37.453, lng: -122.1817 };
+const BENGALURU = { lat: 12.9716, lng: 77.5946 };
+const SAN_FRANCISCO = { lat: 37.7749, lng: -122.4194 };
 const AMBER = "rgb(245, 158, 11)";
 const GREEN = "rgb(34, 197, 94)";
 
@@ -105,8 +105,8 @@ export function Globe({
       };
     };
 
-    const v1 = toVec(BOSTON.lat, BOSTON.lng);
-    const v2 = toVec(MENLO.lat, MENLO.lng);
+    const v1 = toVec(BENGALURU.lat, BENGALURU.lng);
+    const v2 = toVec(SAN_FRANCISCO.lat, SAN_FRANCISCO.lng);
     const dotProd = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
     const omega = Math.acos(Math.max(-1, Math.min(1, dotProd)));
     const sinOmega = Math.sin(omega);
@@ -236,8 +236,8 @@ export function Globe({
         ctx.globalAlpha = 1;
       };
 
-      drawDot(BOSTON.lat, BOSTON.lng, AMBER);
-      drawDot(MENLO.lat, MENLO.lng, GREEN);
+      drawDot(BENGALURU.lat, BENGALURU.lng, AMBER);
+      drawDot(SAN_FRANCISCO.lat, SAN_FRANCISCO.lng, GREEN);
 
       overlayAnimId = requestAnimationFrame(drawOverlay);
     };

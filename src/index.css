@@ -114,6 +114,14 @@
   animation: shimmer-slide var(--speed, 3s) ease-in-out infinite alternate;
 }
 
+.animate-marquee {
+  animation: marquee var(--duration, 40s) linear infinite;
+}
+
+.animate-marquee-vertical {
+  animation: marquee-vertical var(--duration, 40s) linear infinite;
+}
+
 @layer utilities {
   .font-script {
     font-family: 'Pacifico', cursive;

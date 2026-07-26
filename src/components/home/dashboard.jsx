@@ -89,7 +89,7 @@ export default function Dashboard() {
         <GridItem
           area="location"
           icon={<IconMapPin className={dashboardIconClass} />}
-          title="Bengaluru, KA → Global"
+          title="Bengaluru, KA → San Francisco, CA"
           transitionDuration="100ms"
           cursorEmoji="✈️"
         >
