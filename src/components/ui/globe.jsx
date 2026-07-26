@@ -5,26 +5,29 @@ import { cn } from "@/lib/utils";
 
 const MOVEMENT_DAMPING = 1400;
 
-const BENGALURU = { lat: 12.9716, lng: 77.5946 };
-const SAN_FRANCISCO = { lat: 37.7749, lng: -122.4194 };
-const AMBER = "rgb(245, 158, 11)";
+const CURRENT_LOCATION = { lat: 12.9716, lng: 77.5946 };
 const GREEN = "rgb(34, 197, 94)";
+
+// Convert longitude to initial phi angle in radians so Bengaluru faces front
+const BENGALURU_PHI = (CURRENT_LOCATION.lng * Math.PI) / 180 - 0.2;
 
 const GLOBE_CONFIG = {
   width: 800,
   height: 800,
   onRender: () => {},
   devicePixelRatio: 2,
-  phi: 0,
-  theta: 0.4,
+  phi: BENGALURU_PHI,
+  theta: 0.35,
   dark: 1,
-  diffuse: 0.5,
-  mapSamples: 22000,
-  mapBrightness: 1.2,
-  baseColor: [0.8, 0.9, 1.2],
-  markerColor: [34 / 255, 197 / 255, 94 / 255],
-  glowColor: [1, 1, 1],
-  markers: [],
+  diffuse: 1.2,
+  mapSamples: 16000,
+  mapBrightness: 6,
+  baseColor: [0.3, 0.3, 0.35],
+  markerColor: [0.1, 0.8, 0.3],
+  glowColor: [0.15, 0.15, 0.15],
+  markers: [
+    { location: [CURRENT_LOCATION.lat, CURRENT_LOCATION.lng], size: 0.08 }
+  ],
 };
 
 export function Globe({
@@ -46,7 +49,14 @@ export function Globe({
   const globeConfig = useMemo(() => ({
     ...config,
     dark: 1,
-    baseColor: [0.8, 0.9, 1.2],
+    diffuse: 1.2,
+    mapBrightness: 6,
+    baseColor: [0.3, 0.3, 0.35],
+    markerColor: [0.1, 0.8, 0.3],
+    glowColor: [0.15, 0.15, 0.15],
+    markers: [
+      { location: [CURRENT_LOCATION.lat, CURRENT_LOCATION.lng], size: 0.08 }
+    ],
   }), [config]);
 
   const updatePointerInteraction = (value) => {
@@ -62,15 +72,15 @@ export function Globe({
   };
 
   useEffect(() => {
-    let phi = 0;
-    let width = 0;
-    let currentPhi = 0;
+    let phi = BENGALURU_PHI;
+    let width = canvasRef.current?.offsetWidth || 400;
+    let currentPhi = BENGALURU_PHI;
     let overlayAnimId = 0;
-    const theta = globeConfig.theta ?? 0.4;
+    const theta = globeConfig.theta ?? 0.35;
 
     const onResize = () => {
       if (canvasRef.current) {
-        width = canvasRef.current.offsetWidth;
+        width = canvasRef.current.offsetWidth || 400;
       }
     };
 
@@ -82,16 +92,20 @@ export function Globe({
       width: width * 2,
       height: width * 2,
       onRender: (state) => {
-        if (!pointerInteracting.current) phi += 0.005;
+        if (!pointerInteracting.current) phi += 0.003;
+        const currentWidth = canvasRef.current?.offsetWidth || width || 400;
+        width = currentWidth;
         state.phi = phi + rs.get();
-        state.width = width * 2;
-        state.height = width * 2;
+        state.width = currentWidth * 2;
+        state.height = currentWidth * 2;
         currentPhi = state.phi;
       },
     });
 
     setTimeout(() => {
-      if (canvasRef.current) canvasRef.current.style.opacity = "1";
+      if (canvasRef.current) {
+        canvasRef.current.style.opacity = "1";
+      }
     }, 0);
 
     const toVec = (lat, lng) => {
@@ -104,26 +118,6 @@ export function Globe({
         z: -cosLat * Math.sin(lngR),
       };
     };
-
-    const v1 = toVec(BENGALURU.lat, BENGALURU.lng);
-    const v2 = toVec(SAN_FRANCISCO.lat, SAN_FRANCISCO.lng);
-    const dotProd = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-    const omega = Math.acos(Math.max(-1, Math.min(1, dotProd)));
-    const sinOmega = Math.sin(omega);
-    const N = 80;
-    const ARC_LIFT = 0.18;
-
-    const arcPoints = [];
-    for (let i = 0; i <= N; i++) {
-      const t = i / N;
-      const a = Math.sin((1 - t) * omega) / sinOmega;
-      const b = Math.sin(t * omega) / sinOmega;
-      const x = a * v1.x + b * v2.x;
-      const y = a * v1.y + b * v2.y;
-      const z = a * v1.z + b * v2.z;
-      const lift = 1 + Math.sin(Math.PI * t) * ARC_LIFT;
-      arcPoints.push({ x: x * lift, y: y * lift, z: z * lift });
-    }
 
     const project = (p, phiRot) => {
       const cosP = Math.cos(phiRot);
@@ -139,8 +133,6 @@ export function Globe({
         z: sinT * y1 + cosT * z1,
       };
     };
-
-    let beamProgress = 0;
 
     const drawOverlay = () => {
       const overlay = overlayRef.current;
@@ -165,53 +157,6 @@ export function Globe({
       const cy = W / 2;
       const radius = (W / 2) * 0.8;
 
-      const projected = arcPoints.map((p) => {
-        const pr = project(p, currentPhi);
-        return {
-          sx: cx + pr.x * radius,
-          sy: cy - pr.y * radius,
-          z: pr.z,
-        };
-      });
-
-      const lineRgb = "255, 255, 255";
-      ctx.lineWidth = 1.2;
-      ctx.lineCap = "round";
-      for (let i = 0; i < projected.length - 1; i++) {
-        const a = projected[i];
-        const b = projected[i + 1];
-        const zAvg = (a.z + b.z) / 2;
-        if (zAvg < -0.05) continue;
-        const alpha = Math.max(0, Math.min(0.6, ((zAvg + 0.05) / 0.6) * 0.6));
-        ctx.strokeStyle = `rgba(${lineRgb}, ${alpha})`;
-        ctx.beginPath();
-        ctx.moveTo(a.sx, a.sy);
-        ctx.lineTo(b.sx, b.sy);
-        ctx.stroke();
-      }
-
-      beamProgress = (beamProgress + 0.0055) % 1.35;
-      if (beamProgress <= 1) {
-        const trailLength = 14;
-        for (let i = 0; i < trailLength; i++) {
-          const t = beamProgress - i * 0.018;
-          if (t < 0 || t > 1) continue;
-          const idx = Math.min(
-            projected.length - 1,
-            Math.floor(t * (projected.length - 1))
-          );
-          const p = projected[idx];
-          if (p.z < -0.05) continue;
-          const fade = 1 - i / trailLength;
-          const zAlpha = Math.max(0, Math.min(1, (p.z + 0.05) / 0.6));
-          const size = Math.max(0.6, 2.2 - i * 0.12);
-          ctx.beginPath();
-          ctx.arc(p.sx, p.sy, size, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 255, 255, ${fade * zAlpha})`;
-          ctx.fill();
-        }
-      }
-
       const drawDot = (lat, lng, color) => {
         const pr = project(toVec(lat, lng), currentPhi);
         if (pr.z < -0.02) return;
@@ -219,25 +164,24 @@ export function Globe({
         const sy = cy - pr.y * radius;
         const zAlpha = Math.max(0.25, Math.min(1, pr.z + 0.4));
 
-        const glow = ctx.createRadialGradient(sx, sy, 0, sx, sy, 10);
+        const glow = ctx.createRadialGradient(sx, sy, 0, sx, sy, 14);
         glow.addColorStop(0, color);
         glow.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.globalAlpha = zAlpha * 0.45;
+        ctx.globalAlpha = zAlpha * 0.65;
         ctx.fillStyle = glow;
         ctx.beginPath();
-        ctx.arc(sx, sy, 10, 0, Math.PI * 2);
+        ctx.arc(sx, sy, 14, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.globalAlpha = zAlpha;
         ctx.fillStyle = color;
         ctx.beginPath();
-        ctx.arc(sx, sy, 3, 0, Math.PI * 2);
+        ctx.arc(sx, sy, 4.5, 0, Math.PI * 2);
         ctx.fill();
         ctx.globalAlpha = 1;
       };
 
-      drawDot(BENGALURU.lat, BENGALURU.lng, AMBER);
-      drawDot(SAN_FRANCISCO.lat, SAN_FRANCISCO.lng, GREEN);
+      drawDot(CURRENT_LOCATION.lat, CURRENT_LOCATION.lng, GREEN);
 
       overlayAnimId = requestAnimationFrame(drawOverlay);
     };
@@ -259,12 +203,15 @@ export function Globe({
       )}
     >
       <canvas
-        className="size-full opacity-0 transition-opacity duration-500 [contain:layout_paint_size]"
+        className={cn(
+          "size-full opacity-0 transition-opacity duration-500 [contain:layout_paint_size]"
+        )}
         ref={canvasRef}
-        onPointerDown={(e) => {
-          pointerInteracting.current = e.clientX;
-          updatePointerInteraction(e.clientX);
-        }}
+        onPointerDown={(e) =>
+          updatePointerInteraction(
+            e.clientX - pointerInteractionMovement.current
+          )
+        }
         onPointerUp={() => updatePointerInteraction(null)}
         onPointerOut={() => updatePointerInteraction(null)}
         onMouseMove={(e) => updateMovement(e.clientX)}
@@ -274,7 +221,7 @@ export function Globe({
       />
       <canvas
         ref={overlayRef}
-        className="absolute inset-0 size-full pointer-events-none"
+        className="pointer-events-none absolute inset-0 size-full"
       />
     </div>
   );
