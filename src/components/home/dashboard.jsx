@@ -11,6 +11,7 @@ import {
   IconBrandGithub,
   IconBrandSpotifyFilled,
   IconRefresh,
+  IconCode,
 } from "@tabler/icons-react";
 import { Globe } from "@/components/ui/globe";
 import { NumberTicker } from "@/components/ui/number-ticker";
@@ -26,40 +27,16 @@ import { ScratchToReveal } from "@/components/ui/scratch-to-reveal";
 import { Spotlight } from "@/components/ui/spotlight";
 import { SpotlightGlow } from "@/components/ui/spotlight-glow";
 import { GitHubHeatmap } from "./github-heatmap";
+import { GFGHeatmap } from "./gfg-heatmap";
 import { SoundWave } from "@/components/ui/sound-wave";
 import { CustomCursor } from "@/components/ui/custom-cursor";
 import { useGitHub } from "@/hooks/useGitHub";
-
-// ---------------------------------------------------------------------------
-// Lightweight useTheme — reads the `dark` class that theme-toggle.jsx sets
-// ---------------------------------------------------------------------------
-const useTheme = () => {
-  const [resolvedTheme, setResolvedTheme] = useState(() =>
-    document.documentElement.classList.contains("dark") ? "dark" : "light"
-  );
-
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setResolvedTheme(
-        document.documentElement.classList.contains("dark") ? "dark" : "light"
-      );
-    });
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-    return () => observer.disconnect();
-  }, []);
-
-  return { theme: resolvedTheme, resolvedTheme };
-};
+import { useTheme } from "@/hooks/useTheme";
 
 // ---------------------------------------------------------------------------
 // Dashboard
 // ---------------------------------------------------------------------------
 export default function Dashboard() {
-  const totalHours = 5900;
-  const totalCoffees = Math.ceil(totalHours / 4);
   const [scratchGif, setScratchGif] = useState("");
   const { data: githubData, isLoading: isLoadingGitHub } = useGitHub("SudeepKagi");
 
@@ -106,9 +83,9 @@ export default function Dashboard() {
           tooltip="Spotify"
           cursorEmoji="🎵"
         >
-          <div className="flex flex-col-reverse sm:flex-row-reverse items-center gap-4 sm:gap-6 w-full">
-            {/* Dancing Animation Section with Stage Background & Spotlight */}
-            <div className="relative flex items-center justify-center w-full sm:w-12 h-16 sm:h-12 overflow-visible">
+          <div className="flex flex-col-reverse sm:flex-row-reverse items-center justify-between gap-4 sm:gap-6 w-full h-full my-auto">
+            {/* Cool Boombox Animation Section with Pulsing Sound Waves */}
+            <div className="relative flex items-center justify-center w-full sm:w-20 h-20 sm:h-16 overflow-visible shrink-0 my-auto">
               <div
                 className="absolute -top-36 -right-20 sm:-top-72 sm:-right-32 w-64 h-64 sm:w-96 sm:h-96 pointer-events-none z-0 scale-x-[-1]"
                 style={{ opacity: 1 }}
@@ -118,26 +95,70 @@ export default function Dashboard() {
                   fill="#10b981"
                 />
               </div>
-              <div
-                aria-hidden
-                className="absolute left-1/2 top-1/2 w-40 sm:w-32 aspect-[480/65] overflow-hidden opacity-60 z-0 pointer-events-none"
-                style={{ transform: "translate(-50%, calc(-50% + 20px))" }}
-              >
-                <img
-                  src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3N3J5dzE3dW9icXhlMHM0a2wwMzZhMDVmNmJ2bXNtZTZlcnljenhmayZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/GZQGgGtosl3Fm4k0A9/giphy.gif"
-                  alt=""
-                  className="absolute top-0 left-0 w-full aspect-square max-w-none"
-                  style={{ transform: "translateY(-67.7%)" }}
-                />
+
+              {/* Pulsing Sound Wave rings & Boombox */}
+              <div className="relative w-20 h-20 sm:w-16 sm:h-16 z-10 pointer-events-none flex items-center justify-center">
+                {/* Sound wave rings */}
+                {[0, 1, 2].map((i) => (
+                  <span
+                    key={i}
+                    className="absolute rounded-full border-2"
+                    style={{
+                      borderColor: "#10b981",
+                      width: "100%",
+                      height: "100%",
+                      animation: `soundWave 1.8s ease-out infinite`,
+                      animationDelay: `${i * 0.5}s`,
+                      opacity: 0,
+                    }}
+                  />
+                ))}
+
+                {/* Boombox */}
+                <div
+                  className="relative w-14 h-14 sm:w-12 sm:h-12"
+                  style={{ animation: "boomboxBounce 0.5s ease-in-out infinite" }}
+                >
+                  <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-lg">
+                    <rect x="12" y="32" width="76" height="48" rx="8" fill="#0a0a0a" stroke="#10b981" strokeWidth="2" />
+                    <path d="M28 32 Q28 10 50 10 Q72 10 72 32" fill="none" stroke="#0a0a0a" strokeWidth="7" />
+
+                    {/* Left speaker */}
+                    <circle cx="30" cy="58" r="16" fill="#000" stroke="#10b981" strokeWidth="1.5" />
+                    <circle cx="30" cy="58" r="10" fill="none" stroke="#10b981" strokeWidth="1" opacity="0.5" />
+                    <circle cx="30" cy="58" r="5" fill="#10b981">
+                      <animate attributeName="r" values="4;7;4" dur="0.4s" repeatCount="indefinite" />
+                    </circle>
+
+                    {/* Right speaker */}
+                    <circle cx="70" cy="58" r="16" fill="#000" stroke="#10b981" strokeWidth="1.5" />
+                    <circle cx="70" cy="58" r="10" fill="none" stroke="#10b981" strokeWidth="1" opacity="0.5" />
+                    <circle cx="70" cy="58" r="5" fill="#10b981">
+                      <animate attributeName="r" values="7;4;7" dur="0.4s" repeatCount="indefinite" />
+                    </circle>
+
+                    {/* Center LED display */}
+                    <rect x="43" y="38" width="14" height="5" rx="2" fill="#10b981">
+                      <animate attributeName="opacity" values="1;0.3;1" dur="0.3s" repeatCount="indefinite" />
+                    </rect>
+                  </svg>
+                </div>
               </div>
-              <img
-                src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3OXBwZGkzbG4zc2N1dTU4bmgyZDBkenk1amxoZG5meWcydWp2aGU0MyZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/NawOC2k0SQ5pYjTXLt/giphy.gif"
-                alt="Dancing"
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 sm:w-20 sm:h-20 object-contain z-10 pointer-events-none"
-              />
+
+              <style>{`
+                @keyframes boomboxBounce {
+                  0%, 100% { transform: translateY(0) rotate(0deg); }
+                  50% { transform: translateY(-5px) rotate(-2deg); }
+                }
+                @keyframes soundWave {
+                  0% { transform: scale(0.6); opacity: 0.7; }
+                  100% { transform: scale(1.6); opacity: 0; }
+                }
+              `}</style>
             </div>
+
             {/* Spotify Last Played */}
-            <div className="flex-1 min-w-0 w-full">
+            <div className="flex-1 min-w-0 w-full my-auto">
               <LastPlayed />
             </div>
           </div>
@@ -209,31 +230,31 @@ export default function Dashboard() {
         </GridItem>
 
         <GridItem
-          area="hours"
-          icon={<IconClockHour4 className={dashboardIconClass} />}
-          title="Hours Coding"
-          transitionDuration="800ms"
-          tooltip="Powered by WakaTime"
-          cursorEmoji="🕐"
-        >
-          <NumberTicker
-            value={totalHours}
-            className="whitespace-pre-wrap text-3xl font-semibold tracking-tighter text-muted-foreground"
-          />
-        </GridItem>
-
-        <GridItem
-          area="coffees"
-          icon={<IconCoffee className={dashboardIconClass} />}
-          title="Coffees Drank"
+          area="gfg"
+          icon={<IconCode className={dashboardIconClass} />}
+          title="GeeksforGeeks"
           transitionDuration="700ms"
-          tooltip="1 Coffee ☕ = 4 Hours Coding"
-          cursorEmoji="☕"
+          tooltip="Last 30 Days • sudeep327s"
+          cursorEmoji="🟢"
         >
-          <NumberTicker
-            value={totalCoffees}
-            className="whitespace-pre-wrap text-3xl font-semibold tracking-tighter text-muted-foreground"
-          />
+          <div className="flex flex-col gap-[22px] sm:gap-6 h-full">
+            {/* Heatmap */}
+            <div className="flex-1">
+              <GFGHeatmap profileHandle="sudeep327s" />
+            </div>
+            {/* Legend */}
+            <div className="flex items-center justify-center gap-2 sm:gap-1.5 text-xs sm:text-[11px] text-neutral-400">
+              <span>Less</span>
+              <div className="flex gap-1 sm:gap-[3px]">
+                <div className="w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-[2px] bg-neutral-100 dark:bg-neutral-800/50" />
+                <div className="w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-[2px] bg-emerald-300 dark:bg-emerald-800/60" />
+                <div className="w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-[2px] bg-emerald-400 dark:bg-emerald-600/80" />
+                <div className="w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-[2px] bg-emerald-500 dark:bg-emerald-500" />
+                <div className="w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-[2px] bg-emerald-600 dark:bg-emerald-400" />
+              </div>
+              <span>More</span>
+            </div>
+          </div>
         </GridItem>
 
         <GridItem
@@ -241,7 +262,7 @@ export default function Dashboard() {
           icon={<IconBrandGithub className={dashboardIconClass} />}
           title="Activity"
           transitionDuration="900ms"
-          tooltip="Last 7 Weeks"
+          tooltip="Last 30 Days"
           cursorEmoji="💻"
         >
           <div className="flex flex-col gap-[22px] sm:gap-6 h-full">
@@ -386,11 +407,11 @@ const LastPlayed = ({ track }) => {
   const [isReady, setIsReady] = useState(false);
 
   const displayTrack = track || (data.musicList && data.musicList[0]) || {
-    title: "PushDoc & ProctorNet",
-    artist: "Sudeep Kagi",
-    album: "Full Stack Portfolio",
-    albumImageUrl: "/album-cover.jpeg",
-    songUrl: "https://github.com/SudeepKagi",
+    title: "Lucid Dreams",
+    artist: "Juice WRLD",
+    album: "Goodbye & Good Riddance",
+    albumImageUrl: "https://i.scdn.co/image/ab67616d0000f68dca61fb7070d8a562479e0a29",
+    songUrl: "https://open.spotify.com/search/lucid%20dreams",
   };
 
   useEffect(() => {

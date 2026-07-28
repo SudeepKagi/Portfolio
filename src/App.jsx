@@ -1,19 +1,22 @@
 import React from "react";
 import Hero from "@/components/home/hero";
 import Dashboard from "@/components/home/dashboard";
+import AboutMe from "@/components/home/about";
 import Projects from "@/components/home/projects";
 import Experience from "@/components/home/experience";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { CommandPalette } from "@/components/command-palette/command-palette";
 import { data } from "@/data/data";
 
 const BLUR_FADE_DELAY = 0.005;
 
 export default function App() {
   return (
-    <div className="relative min-h-screen w-full max-w-full overflow-x-hidden bg-background dark text-foreground">
+    <div className="relative min-h-screen w-full max-w-full overflow-x-hidden bg-background text-foreground transition-colors duration-300">
       <Navbar navItems={data.nav} />
+      <CommandPalette />
       <img
         src="/layout/background-ellipse3.svg"
         alt=""
@@ -30,6 +33,12 @@ export default function App() {
         <BlurFade delay={BLUR_FADE_DELAY * 2} inView>
           <section id="dashboard">
             <Dashboard />
+          </section>
+        </BlurFade>
+
+        <BlurFade delay={BLUR_FADE_DELAY * 2.5} inView>
+          <section id="about">
+            <AboutMe />
           </section>
         </BlurFade>
 

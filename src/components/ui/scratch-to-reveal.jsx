@@ -29,7 +29,7 @@ export const ScratchToReveal = ({
       canvas.width = w;
       canvas.height = h;
 
-      const ctx = canvas.getContext("2d");
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
       if (ctx) {
         ctx.globalCompositeOperation = "source-over";
         ctx.fillStyle = "#ccc";
@@ -105,7 +105,7 @@ export const ScratchToReveal = ({
 
   const scratch = (clientX, clientY) => {
     const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
+    const ctx = canvas?.getContext("2d", { willReadFrequently: true });
     if (canvas && ctx) {
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / (rect.width || 1);
@@ -135,7 +135,7 @@ export const ScratchToReveal = ({
     if (isComplete) return;
 
     const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
+    const ctx = canvas?.getContext("2d", { willReadFrequently: true });
     if (canvas && ctx && canvas.width > 0 && canvas.height > 0) {
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const pixels = imageData.data;

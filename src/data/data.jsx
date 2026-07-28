@@ -1,11 +1,11 @@
 import React from "react";
-import { IconHome, IconBrandGithub, IconBrush, IconBriefcase2, IconBrandLinkedin, IconMail, IconPencil } from "@tabler/icons-react";
+import { IconHome, IconBrandGithub, IconBrush, IconBriefcase2, IconBrandLinkedin, IconMail, IconPencil, IconLayoutDashboard } from "@tabler/icons-react";
 
 export const data = {
   name: "Sudeep Kagi",
   fullName: "Sudeep Shankaranand Kagi",
   nickname: "Sudeep",
-  tagline: "A Full Stack Engineer who likes building things.",
+  tagline: "A Full Stack Developer who likes building things.",
   location: "Bengaluru, India",
   email: "sudeepskagi@gmail.com",
   phone: "+91 9535030675",
@@ -15,42 +15,22 @@ export const data = {
   experience: [
     {
       image: "/logo/logo.svg",
-      company: "ProctorNet",
-      role: "Lead Full-Stack Architect",
-      date: "2025",
-      description: "Architected a full-stack, multi-role online exam proctoring platform with a 3-tier microservice design (React frontend, Express backend, Python Flask AI service). Implemented WireGuard VPN exam isolation and real-time violation streaming.",
-      location: "Bengaluru, IN",
-      skills: ["React.js", "Node.js", "Express.js", "Socket.io", "Prisma", "PostgreSQL", "Cloudinary", "Python Flask"],
-      href: "https://github.com/SudeepKagi",
-    },
-    {
-      image: "/logo/logo.svg",
-      company: "PushDoc",
-      role: "Creator & Engineer",
-      date: "2025",
-      description: "Built a webhook-driven documentation automation SaaS triggered on git push. Runs AST-level code analysis and auto-commits structured READMEs in under 10s with multi-provider LLM failover (Gemini Pro, Flash, Groq).",
-      location: "Bengaluru, IN",
-      skills: ["React.js", "Node.js", "Express.js", "MongoDB", "GitHub OAuth", "LLM APIs"],
-      href: "https://push-doc.vercel.app/",
-    },
-    {
-      image: "/logo/logo.svg",
-      company: "NagrikSetu",
-      role: "Full-Stack Developer — Hackathon Winner",
-      date: "Utkarsh 2026",
-      description: "Built an AI-powered civic grievance portal at a 24-hour national hackathon (Runner-Up at Utkarsh 2026). Features automated complaint classification, Haversine geo-clustering, and hourly risk-scoring escalation engines.",
-      location: "Davanagere, IN",
-      skills: ["React.js", "Node.js", "Firebase", "Leaflet.js", "REST APIs"],
-      href: "https://ub-1089.vercel.app/",
+      company: "Apna College",
+      role: "Full Stack Web Development & DSA Certification",
+      date: "2024 - 2025",
+      description: "Completed intensive industry-aligned training in Data Structures & Algorithms and MERN Full-Stack Development. Built production-grade web applications, mastered core computer science fundamentals (DSA, OOP, System Design, SQL), and solved 400+ algorithmic problems.",
+      location: "Online",
+      skills: ["Java", "Data Structures", "Algorithms", "React.js", "Node.js", "Express.js", "MongoDB", "SQL", "System Design"],
+      href: "https://www.apnacollege.in/",
     },
     {
       image: "/logo/logo.svg",
       company: "National Cadet Corps (NCC)",
-      role: "Senior Cadet — DDG Commendation",
+      role: "Senior Cadet",
       date: "2023 - 2025",
-      description: "Awarded DDG Commendation for exceptional leadership, discipline, and service. Organized technical and social initiatives across camps.",
+      description: "Demonstrated leadership, discipline, and operational management across annual training camps. Led platoon drills, managed camp logistics, coordinated team exercises, and spearheaded community outreach initiatives.",
       location: "Bengaluru, IN",
-      skills: ["Leadership", "Team Building", "Operations", "Crisis Management"],
+      skills: ["Leadership", "Team Building", "Operations", "Crisis Management", "Discipline"],
     },
   ],
 
@@ -58,20 +38,29 @@ export const data = {
     {
       image: "/logo/logo.svg",
       company: "Nitte Meenakshi Institute of Technology (NMIT)",
-      role: "B.E. in Electronics and Communication Engineering",
-      date: "2023 - 2027",
-      description: "CGPA: 7.54 / 10 · 7th Semester. Core CS & ECE subjects including Data Structures, Algorithms, Operating Systems, Computer Networks, and DBMS.",
-      location: "Bengaluru, KA",
-      skills: ["Java", "JavaScript", "SQL", "React", "Node.js", "DSA", "DBMS"],
+      role: "B.E. in Electronics and Communication Engineering (ECE)",
+      date: "2023 – 2027",
+      description: "CGPA: 7.54 / 10 (7th Semester) · Pursuing a Bachelor's degree in Electronics and Communication Engineering with coursework in Digital Electronics, Microprocessors & Microcontrollers, Embedded Systems, Signals & Systems, VLSI Design, Communication Systems, along with core Computer Science subjects including Data Structures & Algorithms, Operating Systems, Computer Networks, Database Management Systems, Java, JavaScript, React, and Node.js.",
+      location: "Bengaluru, Karnataka",
+      skills: ["ECE", "Digital Electronics", "Embedded Systems", "Signals & Systems", "VLSI Design", "DSA", "DBMS", "Java", "JavaScript", "React", "Node.js"],
     },
     {
       image: "/logo/logo.svg",
       company: "Konnur Science PU College",
-      role: "Pre-University (PCMB)",
-      date: "2021 - 2023",
-      description: "Physics, Chemistry, Mathematics, Biology.",
-      location: "Bengaluru, KA",
-      skills: ["Mathematics", "Physics", "Chemistry"],
+      role: "Pre-University Course (PCMB) – Karnataka State Board (II PUC)",
+      date: "2021 – 2023",
+      description: "Percentage: 92% · Completed II PUC with the PCMB (Physics, Chemistry, Mathematics & Biology) stream under the Karnataka School Examination and Assessment Board (KSEAB).",
+      location: "Karnataka",
+      skills: ["PCMB (92%)", "Physics", "Chemistry", "Mathematics", "Biology", "KSEAB"],
+    },
+    {
+      image: "/logo/logo.svg",
+      company: "Konnur English Medium High School",
+      role: "Secondary School Leaving Certificate (SSLC) – Karnataka State Board",
+      date: "2020 – 2021",
+      description: "Percentage: 80% · Completed SSLC under the Karnataka School Examination and Assessment Board (KSEAB).",
+      location: "Karnataka",
+      skills: ["SSLC (80%)", "KSEAB", "Mathematics", "Science"],
     },
   ],
 
@@ -83,7 +72,7 @@ export const data = {
       active: true,
       technologies: ["React.js", "Node.js", "Express.js", "Socket.io", "Prisma", "PostgreSQL", "Python Flask"],
       description: "Multi-role exam proctoring platform with WireGuard VPN network isolation, 10-point security checks, and real-time Socket.io violation streaming to invigilators.",
-      thumbnail: "/website_screenshot.png",
+      thumbnail: "/proctornet.png",
     },
     {
       title: "PushDoc | AI-Powered Documentation Engine",
@@ -92,7 +81,7 @@ export const data = {
       active: true,
       technologies: ["React.js", "Node.js", "Express.js", "MongoDB", "GitHub OAuth", "Gemini API", "Groq"],
       description: "Git push webhook engine that analyzes code diffs via AST parsing and auto-commits markdown documentation with multi-LLM failover strategy.",
-      thumbnail: "/website_screenshot.png",
+      thumbnail: "/push_doc.png",
     },
     {
       title: "NagrikSetu | Civic Grievance Portal",
@@ -101,7 +90,7 @@ export const data = {
       active: true,
       technologies: ["React.js", "Node.js", "Firebase", "Leaflet.js", "Nodemailer"],
       description: "AI-classified complaint routing system with Haversine-based geo-clustering heatmaps and automated officer escalation risk scoring.",
-      thumbnail: "/website_screenshot.png",
+      thumbnail: "/nagriksetu.png",
     },
     {
       title: "TypeCraft | Real-time Multiplayer Typing",
@@ -110,7 +99,7 @@ export const data = {
       active: true,
       technologies: ["React.js", "Node.js", "Socket.io", "Express.js", "TailwindCSS"],
       description: "Futuristic multiplayer typing arena with instant room creation, live WPM streaming, and precision analytics.",
-      thumbnail: "/website_screenshot.png",
+      thumbnail: "/typecraft.png",
     },
     {
       title: "Stayora | Luxury Homestay Rentals",
@@ -119,13 +108,13 @@ export const data = {
       active: true,
       technologies: ["React.js", "Node.js", "MongoDB", "Express.js", "Cloudinary"],
       description: "Property booking platform with location search, category browsing, image upload, and seamless booking experience.",
-      thumbnail: "/website_screenshot.png",
+      thumbnail: "/stayora.png",
     },
   ],
 
   contact: [
     {
-      href: "mailto:sudeepskagi@gmail.com",
+      href: "https://mail.google.com/mail/?view=cm&fs=1&to=sudeepskagi@gmail.com",
       label: "Email",
       icon: <IconMail className="h-5 w-5" />,
       aria: "Email",
@@ -144,11 +133,56 @@ export const data = {
     },
   ],
 
+  achievements: [
+    {
+      image: "/logo/logo.svg",
+      company: "Utkarsh 2026 — National Level Hackathon",
+      role: "Runner-Up",
+      date: "2026",
+      description: "Secured Runner-Up at a 24-hour National Level Technical Hackathon organised by University BDT College of Engineering, Davanagere. Built NagrikSetu — a civic grievance platform for Indian municipalities featuring AI-powered complaint classification (Gemini AI), Culprit Buster automated officer risk scoring, anonymous whistleblower protection, real-time heatmaps & geo-clustering, and auto escalation emails for negligent officers. Built in 24 hours with a team of 4 using React, Node.js, Firebase, and zero budget.",
+      location: "Davanagere, IN",
+      skills: ["AI Complaint Classification", "Geo-clustering Heatmaps", "Whistleblower Protection", "Auto Escalation System", "React.js", "Node.js", "Firebase"],
+      href: "https://ub-1089.vercel.app/",
+    },
+    {
+      image: "/logo/logo.svg",
+      company: "National Cadet Corps (NCC)",
+      role: "DDG Commendation Award",
+      date: "2025",
+      description: "Awarded the Deputy Director General (DDG) Commendation Card for exemplary leadership, national service, military discipline, and outstanding contribution across annual training camps.",
+      location: "Bengaluru, IN",
+      skills: ["Leadership", "National Service", "Military Discipline"],
+    },
+    {
+      image: "/logo/logo.svg",
+      company: "National Cadet Corps (NCC)",
+      role: "NCC 'C' Certificate",
+      date: "2025",
+      description: "Earned the prestigious NCC 'C' Certificate — the highest rank qualification certification in the National Cadet Corps, awarded for advanced military training, discipline, and exemplary conduct.",
+      location: "Bengaluru, IN",
+      skills: ["Advanced Military Training", "Discipline", "Leadership"],
+    },
+    {
+      image: "/logo/logo.svg",
+      company: "School & College Sports",
+      role: "State-Level Kho-Kho Athlete",
+      date: "2021 - 2024",
+      description: "Represented school and college teams at State-Level Kho-Kho Championships, demonstrating athletic endurance, team strategy, quick reflexes, and competitive sportsmanship across multiple seasons.",
+      location: "Karnataka, IN",
+      skills: ["Team Strategy", "Athletic Endurance", "Sportsmanship"],
+    },
+  ],
+
   nav: [
     {
       name: "Home",
       link: "hero",
       icon: <IconHome className="subpixel-antialiased h-5 w-5 text-zinc-500 hover:text-zinc-950 dark:text-zinc-300 hover:dark:text-zinc-50 hover:animate-wiggle animate-wiggle transition-colors duration-100" />,
+    },
+    {
+      name: "Dashboard",
+      link: "dashboard",
+      icon: <IconLayoutDashboard className="subpixel-antialiased h-5 w-5 text-zinc-500 hover:text-zinc-950 dark:text-zinc-300 hover:dark:text-zinc-50 hover:animate-wiggle animate-wiggle transition-colors duration-100" />,
     },
     {
       name: "Projects",
@@ -161,9 +195,9 @@ export const data = {
       icon: <IconBriefcase2 className="subpixel-antialiased h-5 w-5 text-zinc-500 hover:text-zinc-950 dark:text-zinc-300 hover:dark:text-zinc-50 hover:animate-wiggle animate-wiggle transition-colors duration-100" />,
     },
     {
-      name: "Blog",
-      link: "experience",
-      icon: <IconPencil className="subpixel-antialiased h-5 w-5 text-zinc-500 hover:text-zinc-950 dark:text-zinc-300 hover:dark:text-zinc-50 hover:animate-wiggle animate-wiggle transition-colors duration-100" />,
+      name: "Contact",
+      link: "contact",
+      icon: <IconMail className="subpixel-antialiased h-5 w-5 text-zinc-500 hover:text-zinc-950 dark:text-zinc-300 hover:dark:text-zinc-50 hover:animate-wiggle animate-wiggle transition-colors duration-100" />,
     },
   ],
 
@@ -194,18 +228,18 @@ export const data = {
 
   musicList: [
     {
+      title: "Lucid Dreams",
+      artist: "Juice WRLD",
+      album: "Goodbye & Good Riddance",
+      albumImageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfdyx1H7bImyJC_0NOs_wI6jK-jEPB7HLbpLJpFqd_CA&s=10",
+      songUrl: "https://open.spotify.com/search/lucid%20dreams",
+    },
+    {
       title: "U.N.I",
       artist: "NAV",
       album: "OMW2 REXDALE",
       albumImageUrl: "/album-cover.jpeg",
       songUrl: "https://open.spotify.com/",
-    },
-    {
-      title: "PushDoc & ProctorNet",
-      artist: "Sudeep Kagi",
-      album: "Full Stack Portfolio",
-      albumImageUrl: "/album-cover.jpeg",
-      songUrl: "https://github.com/SudeepKagi",
     },
   ],
 };

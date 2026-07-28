@@ -9,12 +9,13 @@ import { cn } from "@/lib/utils";
 import { ModeToggle } from "@/components/theme-toggle";
 import { AnimatedLogo } from "@/components/ui/logo-animation";
 import { CommandPaletteButton } from "@/components/command-palette/command-palette-button";
-import { IconBrandGithub, IconStar } from "@tabler/icons-react";
+import { useTheme } from "@/hooks/useTheme";
 
 export const Navbar = ({
   navItems,
   className,
 }) => {
+  const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const { scrollY } = useScroll();
   const [visible, setVisible] = useState(true);
@@ -67,52 +68,39 @@ export const Navbar = ({
             duration: 0.2,
           }}
           className={cn(
-            "flex max-w-5xl w-full justify-self-center fixed top-0 sm:top-4 inset-x-0 mx-auto md:rounded-lg bg-zinc-950/25 sm:bg-zinc-950/20 backdrop-blur-lg border-none z-[5000] px-4 py-3 sm:py-4 items-center justify-between",
+            "flex max-w-5xl w-full justify-self-center fixed top-0 sm:top-4 inset-x-0 mx-auto md:rounded-lg bg-white/40 dark:bg-zinc-950/20 backdrop-blur-lg border-none z-[5000] px-4 py-3 sm:py-4 items-center justify-between shadow-sm dark:shadow-none",
             className
           )}
         >
           {/* Logo on the left */}
-          <div className="flex items-center mr-4 sm:mr-16 cursor-pointer" onClick={handleLogoClick}>
+          <div className="flex items-center cursor-pointer shrink-0" onClick={handleLogoClick}>
             {mounted && (
               <AnimatedLogo
-                theme="dark"
+                theme={resolvedTheme === "dark" ? "dark" : "light"}
                 className="w-6 h-6 sm:w-7 sm:h-7"
                 onClick={handleLogoClick}
               />
             )}
           </div>
 
-          {/* Links in the center */}
-          <div className="flex items-center gap-3 sm:gap-6 ml-auto mr-0 sm:mr-4">
+          {/* All five nav items centered */}
+          <div className="flex items-center gap-2.5 sm:gap-6 mx-auto">
             {navItems.map((navItem, idx) => (
               <button
                 key={`link=${idx}`}
                 onClick={() => handleNavClick(navItem.link)}
                 className={cn(
-                  "relative font-semibold text-zinc-400 hover:text-white items-center flex space-x-1 transition-colors duration-300"
+                  "relative font-semibold text-zinc-700 dark:text-zinc-400 hover:text-black dark:hover:text-white items-center flex space-x-1.5 transition-colors duration-300 text-xs sm:text-sm px-1 sm:px-2 py-1 rounded-md"
                 )}
               >
                 <span className="block sm:hidden">{navItem.icon}</span>
-                <span className="hidden sm:block text-sm">{navItem.name}</span>
+                <span className="hidden sm:block">{navItem.name}</span>
               </button>
             ))}
-            <span
-              aria-hidden
-              className="h-5 w-px self-center bg-zinc-800"
-            />
-            <a
-              href="https://github.com/SudeepKagi/Portfolio"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Star this site on GitHub (9 stars)"
-              className="group inline-flex items-center gap-1.5 rounded-md border-none bg-zinc-900/50 hover:bg-zinc-800/80 px-2.5 py-1 text-xs text-zinc-400 hover:text-white transition-colors"
-            >
-              <IconBrandGithub className="h-3.5 w-3.5 text-zinc-400 group-hover:text-white" />
-              <span className="flex items-center gap-0.5 tabular-nums">
-                <IconStar className="h-3 w-3 transition-colors group-hover:text-amber-400 group-hover:animate-spin-grow" />
-                9
-              </span>
-            </a>
+          </div>
+
+          {/* Utilities on the right */}
+          <div className="flex items-center gap-2 shrink-0">
             <CommandPaletteButton />
             <ModeToggle />
           </div>
@@ -121,3 +109,4 @@ export const Navbar = ({
     </AnimatePresence>
   );
 };
+

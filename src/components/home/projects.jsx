@@ -13,27 +13,39 @@ import { IconBrush, IconLink } from "@tabler/icons-react";
 import { SectionHeading, headingIconClass } from "@/components/layout/section-heading";
 
 export default function Projects() {
+  const totalProjects = data.projects.length;
+
   return (
     <div className="flex flex-col">
       <SectionHeading icon={<IconBrush className={headingIconClass} />}>
         Projects
       </SectionHeading>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mx-auto w-full">
-        {data.projects.map((item, index) => (
-          <BlurFade
-            key={item.title}
-            delay={0.04 * 12 + index * 0.05}
-          >
-            <ProjectCard
-              href={item.href}
-              title={item.title}
-              description={item.description}
-              dates={item.dates}
-              tags={item.technologies}
-              thumbnail={item.thumbnail}
-            />
-          </BlurFade>
-        ))}
+        {data.projects.map((item, index) => {
+          const isLast = index === totalProjects - 1;
+          const isOdd = totalProjects % 2 !== 0;
+
+          return (
+            <BlurFade
+              key={item.title}
+              delay={0.04 * 12 + index * 0.05}
+              className={
+                isLast && isOdd
+                  ? "sm:col-span-2 sm:w-[calc(50%-0.5rem)] sm:mx-auto w-full"
+                  : "w-full"
+              }
+            >
+              <ProjectCard
+                href={item.href}
+                title={item.title}
+                description={item.description}
+                dates={item.dates}
+                tags={item.technologies}
+                thumbnail={item.thumbnail}
+              />
+            </BlurFade>
+          );
+        })}
       </div>
     </div>
   );

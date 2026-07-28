@@ -1,15 +1,17 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useEffect, useState, useMemo } from "react";
+import { useGFG } from "@/hooks/useGFG";
 
-const levelColors = {
+const gfgLevelColors = {
   NONE: "bg-zinc-100 dark:bg-neutral-800/50",
-  FIRST_QUARTILE: "bg-green-200 dark:bg-green-900/70",
-  SECOND_QUARTILE: "bg-green-400 dark:bg-green-700/80",
-  THIRD_QUARTILE: "bg-green-600 dark:bg-green-500/90",
-  FOURTH_QUARTILE: "bg-green-700 dark:bg-green-400",
+  LOW: "bg-emerald-200 dark:bg-emerald-900/60",
+  MEDIUM: "bg-emerald-400 dark:bg-emerald-700/80",
+  HIGH: "bg-emerald-500 dark:bg-emerald-500",
+  MAX: "bg-emerald-600 dark:bg-emerald-400",
 };
 
-export function GitHubHeatmap({ contributions = [], isLoading = false }) {
+export function GFGHeatmap({ profileHandle = "sudeep327s" }) {
+  const { data: gfgState, isLoading } = useGFG(profileHandle);
   const [revealedIndices, setRevealedIndices] = useState(new Set());
 
   const placeholderData = useMemo(() => {
@@ -20,27 +22,29 @@ export function GitHubHeatmap({ contributions = [], isLoading = false }) {
     }));
   }, []);
 
-  const displayContributions = isLoading || !contributions.length ? placeholderData : contributions;
+  const displaySubmissions = isLoading || !gfgState?.submissions ? placeholderData : gfgState.submissions;
 
+  // Group into 5 columns (weeks) of 7 days (rows), matching GitHub/GFG layout
   const weeks = useMemo(() => {
     const list = [];
-    for (let i = 0; i < displayContributions.length; i += 7) {
-      list.push(displayContributions.slice(i, i + 7));
+    for (let i = 0; i < displaySubmissions.length; i += 7) {
+      list.push(displaySubmissions.slice(i, i + 7));
     }
     return list;
-  }, [displayContributions]);
+  }, [displaySubmissions]);
 
   useEffect(() => {
-    if (!isLoading && contributions.length > 0) {
+    if (!isLoading && gfgState?.submissions) {
       setRevealedIndices(new Set());
+      const indices = Array.from({ length: gfgState.submissions.length }, (_, i) => i);
       const delay = 15;
-      contributions.forEach((_, index) => {
+      indices.forEach((index, sequence) => {
         setTimeout(() => {
           setRevealedIndices((prev) => new Set(prev).add(index));
-        }, index * delay);
+        }, sequence * delay);
       });
     }
-  }, [isLoading, contributions]);
+  }, [isLoading, gfgState]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString + "T12:00:00Z");
@@ -64,13 +68,13 @@ export function GitHubHeatmap({ contributions = [], isLoading = false }) {
                   <Tooltip key={day.date}>
                     <TooltipTrigger asChild>
                       <a
-                        href="https://github.com/SudeepKagi"
+                        href={`https://www.geeksforgeeks.org/profile/${profileHandle}?tab=activity`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label="View GitHub profile"
+                        aria-label="View GeeksforGeeks activity profile"
                         className={`
                           block w-3.5 h-3.5 sm:w-3 sm:h-3 rounded-[2px]
-                          ${levelColors[displayLevel]}
+                          ${gfgLevelColors[displayLevel]}
                           transition-all duration-300
                           hover:scale-125
                           cursor-pointer
@@ -79,8 +83,8 @@ export function GitHubHeatmap({ contributions = [], isLoading = false }) {
                     </TooltipTrigger>
                     <TooltipContent side="top">
                       <div className="text-xs">
-                        <div className="font-semibold">
-                          {day.count} {day.count === 1 ? "contribution" : "contributions"}
+                        <div className="font-semibold text-emerald-400">
+                          {day.count} {day.count === 1 ? "problem solved" : "problems solved"}
                         </div>
                         <div className="text-muted-foreground">{formatDate(day.date)}</div>
                       </div>

@@ -22,7 +22,9 @@ import { data } from "@/data/data";
 export default function Hero() {
   const [wiggleIcon, setWiggleIcon] = useState(null);
   const [phase, setPhase] = useState("initial");
-  const [suffix, setSuffix] = useState("deep");
+  const WORDS = ["Sudeep", "a Developer", "a Builder", "a Problem Solver"];
+  const [wordIndex, setWordIndex] = useState(0);
+  const currentWord = WORDS[wordIndex];
 
   useEffect(() => {
     let timer;
@@ -39,7 +41,7 @@ export default function Hero() {
   }, [phase]);
 
   const handleExitComplete = () => {
-    setSuffix((s) => (s === "deep" ? "peed" : "deep"));
+    setWordIndex((prev) => (prev + 1) % WORDS.length);
     setPhase("enter");
   };
 
@@ -50,6 +52,7 @@ export default function Hero() {
 
   const handleShimmerButtonClick = () => {
     handleIconClick("email");
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${data.email}`, "_blank");
   };
 
   const ctaRef = useRef(null);
@@ -68,16 +71,16 @@ export default function Hero() {
         <BlurFade delay={0.005} inView>
           <div className="relative flex-col space-y-1">
             <div className="relative flex flex-col items-center justify-center">
-              <BackgroundGradient className="z-50 h-24 w-24 sm:w-28 sm:h-28 md:w-32 md:h-32">
+              <BackgroundGradient className="z-50 h-24 w-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full overflow-hidden relative">
                 <img
                   src="/photo.jpg"
                   alt="Profile Picture"
-                  className="absolute rounded-full transition-all duration-500 ease-in-out opacity-100 group-hover:opacity-0 w-full h-full object-cover grayscale contrast-100"
+                  className="absolute inset-0 w-full h-full object-cover rounded-full grayscale transition-all duration-300 opacity-100 group-hover:opacity-0"
                 />
                 <img
                   src="/photo.jpg"
                   alt="Profile Picture Hover"
-                  className="absolute rounded-full transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100 w-full h-full object-cover saturate-105 contrast-100"
+                  className="absolute inset-0 w-full h-full object-cover rounded-full grayscale-0 saturate-125 transition-all duration-300 opacity-0 group-hover:opacity-100"
                 />
               </BackgroundGradient>
               <ShimmerButton onClick={handleShimmerButtonClick} className="z-50 mt-8">
@@ -97,18 +100,18 @@ export default function Hero() {
             <div className="w-full space-y-6">
               <BlurFade delay={0.005 * 1} inView>
                 <p className="z-50 subpixel-antialiased leading-[1.8] text-5xl sm:text-7xl font-bold text-center whitespace-nowrap">
-                  <span className="inline-block pb-2 bg-gradient-to-b from-zinc-200 dark:from-zinc-50 to-zinc-950 dark:to-zinc-300 bg-clip-text text-transparent">
+                  <span className="inline-block pb-2 bg-gradient-to-b from-zinc-900 dark:from-zinc-50 to-zinc-700 dark:to-zinc-300 bg-clip-text text-transparent">
                     Hi. I&#39;m{" "}
                     <AnimatedName
                       phase={phase}
-                      suffix={suffix}
+                      text={currentWord}
                       onExitComplete={handleExitComplete}
                       className="font-script font-normal text-[1.05em] leading-none align-baseline"
                     />
                   </span>
                 </p>
                 <p className="text-base subpixel-antialiased tracking-tight font-medium sm:text-2xl text-center text-secondary-foreground">
-                  A Full Stack Engineer who likes{" "}
+                  A Full Stack Developer who likes{" "}
                   <span className="font-script font-normal text-[1.05em] leading-none align-baseline text-secondary-foreground">
                     building things
                   </span>

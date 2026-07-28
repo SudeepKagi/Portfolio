@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { IconSend, IconBrandGithub, IconStar, IconRss } from "@tabler/icons-react";
+import { IconSend, IconBrandGithub, IconStar, IconRss, IconSparkles } from "@tabler/icons-react";
 import { motion, useInView } from "framer-motion";
 import { AnimatedLogo } from "@/components/ui/logo-animation";
 import { data } from "@/data/data";
+import { useTheme } from "@/hooks/useTheme";
 
 export const Footer = () => {
+  const { resolvedTheme } = useTheme();
   const [sent, setSent] = useState(false);
   const waveRef = useRef(null);
   const waveInView = useInView(waveRef, { amount: 0.5 });
@@ -35,7 +37,7 @@ export const Footer = () => {
   const handleLogoClick = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
-    <footer className="relative w-full bg-background text-secondary-foreground overflow-hidden">
+    <footer id="contact" className="relative w-full bg-background text-secondary-foreground overflow-hidden">
       <div className="relative z-10 mx-auto flex max-w-5xl flex-col px-4 pt-20 sm:pt-28">
         <div className="flex flex-col items-center justify-center mb-16 sm:mb-24">
           <h2 className="mx-16 sm:mx-none text-center text-pretty text-3xl sm:text-4xl font-bold mb-8">
@@ -49,17 +51,19 @@ export const Footer = () => {
                 key={waveKey}
                 className="inline-block origin-bottom-right animate-wiggle hover:animate-wiggle"
               >
-                👋
+                <IconSparkles className="inline-block h-7 w-7 text-indigo-400 align-middle" />
               </span>
             </span>
           </h2>
           <a
-            href={`mailto:${data.email}`}
+            href={`https://mail.google.com/mail/?view=cm&fs=1&to=${data.email}`}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={handleSendClick}
             className="group inline-block active:scale-95 transition-transform duration-150"
           >
             <div className="relative inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-[2px] font-medium text-white shadow-lg transition-all duration-300 hover:shadow-indigo-500/25">
-              <div className="flex items-center gap-2 rounded-[10px] bg-zinc-950 px-6 py-3 transition-all duration-300 group-hover:bg-opacity-80">
+              <div className="flex items-center gap-2 rounded-[10px] bg-zinc-950 text-white px-6 py-3 transition-all duration-300 group-hover:bg-opacity-80">
                 <motion.span
                   aria-hidden
                   className="inline-flex will-change-transform"
@@ -84,24 +88,13 @@ export const Footer = () => {
               </div>
             </div>
           </a>
-          <a
-            href="https://github.com/SudeepKagi/Portfolio"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group mt-6 inline-flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors"
-          >
-            <IconBrandGithub className="h-4 w-4" />
-            <span>This site is open source: star it on GitHub</span>
-            <IconStar className="h-3.5 w-3.5 transition-colors group-hover:text-amber-400 group-hover:animate-spin-grow" />
-            <span className="tabular-nums font-medium">12</span>
-          </a>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 sm:gap-12 border-t border-border/50 pt-10 pb-8">
           <div className="col-span-2 sm:col-span-1 flex flex-col items-start gap-3">
             {mounted && (
               <AnimatedLogo
-                theme="dark"
+                theme={resolvedTheme === "dark" ? "dark" : "light"}
                 className="w-8 h-8"
                 onClick={handleLogoClick}
               />
@@ -110,7 +103,7 @@ export const Footer = () => {
               {data.name}
             </p>
             <p className="text-xs text-muted-foreground leading-relaxed max-w-xs">
-              Full Stack Engineer & ECE Student at NMIT Bengaluru, building production-grade web applications.
+              Full Stack Developer & ECE Student at NMIT Bengaluru, building production-grade web applications.
             </p>
           </div>
 

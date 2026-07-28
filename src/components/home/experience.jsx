@@ -3,7 +3,7 @@ import { TracingBeam } from "@/components/ui/tracing-beam";
 import { data } from "@/data/data";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { SectionHeading, headingIconClass } from "@/components/layout/section-heading";
-import { IconBriefcase2, IconSchool } from "@tabler/icons-react";
+import { IconBriefcase2, IconSchool, IconTrophy } from "@tabler/icons-react";
 import { SpotlightGlow } from "@/components/ui/spotlight-glow";
 
 export default function Experience() {
@@ -14,8 +14,10 @@ export default function Experience() {
       </SectionHeading>
       <TracingBeam>
         <div className="space-y-4">
+
+          {/* ── Experience ── */}
           {data.experience.map((item, index) => (
-            <BlurFade key={`${item.company}-${item.role}-${index}`} delay={0.10 + index * .05} direction="right" inView>
+            <BlurFade key={`exp-${item.company}-${index}`} delay={0.10 + index * 0.05} direction="right" inView>
               <ExperienceItem
                 image={item.image}
                 company={item.company}
@@ -28,29 +30,57 @@ export default function Experience() {
               />
             </BlurFade>
           ))}
+
+          {/* ── Achievements ── */}
+          {data.achievements && data.achievements.length > 0 && (
+            <BlurFade delay={0.25} direction="right" inView>
+              <SectionHeading className="my-12" icon={<IconTrophy className={headingIconClass} />}>
+                Achievements & Honors
+              </SectionHeading>
+              <div className="space-y-4">
+                {data.achievements.map((item, index) => (
+                  <BlurFade key={`ach-${item.company}-${index}`} delay={0.30 + index * 0.05} direction="right" inView>
+                    <ExperienceItem
+                      image={item.image}
+                      company={item.company}
+                      role={item.role}
+                      date={item.date}
+                      description={item.description}
+                      location={item.location}
+                      skills={item.skills}
+                      href={item.href}
+                    />
+                  </BlurFade>
+                ))}
+              </div>
+            </BlurFade>
+          )}
+
+          {/* ── Education ── */}
+          <BlurFade delay={0.50} direction="right" inView>
+            <SectionHeading className="my-12" icon={<IconSchool className={headingIconClass} />}>
+              Education
+            </SectionHeading>
+            <div className="space-y-4">
+              {data.education.map((item, index) => (
+                <BlurFade key={`edu-${item.company}-${index}`} delay={0.55 + index * 0.05} direction="right" inView>
+                  <ExperienceItem
+                    image={item.image}
+                    company={item.company}
+                    role={item.role}
+                    date={item.date}
+                    description={item.description}
+                    location={item.location}
+                    skills={item.skills}
+                    href={item.href}
+                  />
+                </BlurFade>
+              ))}
+            </div>
+          </BlurFade>
+
         </div>
       </TracingBeam>
-
-      <BlurFade delay={0.10} direction="right" inView>
-        <SectionHeading className="my-12" icon={<IconSchool className={headingIconClass} />}>
-          Education
-        </SectionHeading>
-        <div className="space-y-4">
-          {data.education.map((item, index) => (
-            <ExperienceItem
-              key={item.company}
-              image={item.image}
-              company={item.company}
-              role={item.role}
-              date={item.date}
-              description={item.description}
-              location={item.location}
-              skills={item.skills}
-              href={item.href}
-            />
-          ))}
-        </div>
-      </BlurFade>
     </div>
   );
 }
