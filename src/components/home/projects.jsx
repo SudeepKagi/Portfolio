@@ -61,8 +61,9 @@ export function ProjectCard({ title, href, description, tags, thumbnail }) {
       >
         <div className="relative overflow-hidden h-48 bg-muted">
           <img
-            src={thumbnail || "/website_screenshot.png"}
+            src={thumbnail || "/nagriksetu.png"}
             alt={title}
+            loading="lazy"
             className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
           />
           <div className="absolute top-2 right-2 bg-black/40 text-white rounded-full p-1.5 z-20 sm:opacity-0 sm:group-hover:opacity-100 opacity-100 transition-opacity duration-300 backdrop-blur-sm">

@@ -111,9 +111,9 @@ export default function Hero() {
                   </span>
                 </p>
                 <p className="text-base subpixel-antialiased tracking-tight font-medium sm:text-2xl text-center text-secondary-foreground">
-                  A Full Stack Developer who likes{" "}
+                  A Full Stack Developer who builds{" "}
                   <span className="font-script font-normal text-[1.05em] leading-none align-baseline text-secondary-foreground">
-                    building things
+                    under pressure
                   </span>
                   .
                 </p>

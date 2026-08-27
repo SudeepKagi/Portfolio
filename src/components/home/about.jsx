@@ -10,32 +10,24 @@ export default function AboutMe() {
       </SectionHeading>
 
       <p className="text-center text-sm sm:text-base leading-relaxed text-muted-foreground font-normal tracking-tight max-w-4xl mx-auto">
-        I'm{" "}
+        Electronics & Communication Engineering got me into hardware — the MERN stack is what's kept me up past 3 AM ever since. I'm{" "}
         <span className="font-semibold text-foreground">
           Sudeep Shankaranand Kagi
         </span>
-        , a fourth-year Electronics & Communication Engineering student at{" "}
+        , a fourth-year ECE student at{" "}
         <span className="font-semibold text-foreground">
           Nitte Meenakshi Institute of Technology (NMIT), Bengaluru
-        </span>
-        , and an aspiring Full Stack Developer. I build responsive, scalable web
-        applications using the{" "}
-        <span className="font-semibold text-foreground">
-          MERN stack
         </span>{" "}
-        and enjoy solving real-world problems through clean, efficient code. With
-        a strong foundation in Data Structures, Object-Oriented Programming, Database
-        Management Systems, and over{" "}
+        who taught himself full-stack development because shipping something people could actually click through beat simulating circuits on paper.
+        Since then: <span className="font-semibold text-foreground">150+ DSA problems solved</span>, five full-stack projects spanning VPN-isolated exam proctoring to AI-classified civic platforms, and a{" "}
         <span className="font-semibold text-foreground">
-          150 solved DSA problems
-        </span>
-        , I'm continuously expanding my skills by building hands-on projects.
-        I'm currently seeking{" "}
-        <span className="font-semibold text-foreground">
-          full-time opportunities
+          Runner-Up finish — out of 120+ teams
         </span>{" "}
-        where I can contribute, learn from experienced teams, and grow as a
-        software engineer.
+        at a national hackathon where I led a 4-person team to a working product in 24 hours. I'm looking for a{" "}
+        <span className="font-semibold text-foreground">
+          full-time engineering role
+        </span>{" "}
+        where "move fast" is a real expectation, not a poster on the wall.
       </p>
     </div>
   );
