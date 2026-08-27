@@ -1,57 +1,110 @@
 import { useEffect, useState } from "react";
 
+const CACHE_KEY = "github_contributions_live_v2";
+const CACHE_EXPIRY_MS = 15 * 60 * 1000; // 15 minutes cache for fast reloads
+
 export function useGitHub(username = "SudeepKagi") {
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(() => {
+    try {
+      const cached = localStorage.getItem(`${CACHE_KEY}_${username}`);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Date.now() - parsed.timestamp < CACHE_EXPIRY_MS && parsed.data?.contributions?.length) {
+          return parsed.data;
+        }
+      }
+    } catch {
+      // Ignore localStorage errors
+    }
+    return null;
+  });
+  const [isLoading, setIsLoading] = useState(!data);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchGitHubData() {
+    let isMounted = true;
+
+    async function fetchLiveContributions() {
+      // 1. Try Primary Live API (jogruber)
       try {
-        const res = await fetch(`https://github-contributions-api.deno.dev/${username}.json`);
-        if (!res.ok) {
-          throw new Error("Failed to fetch GitHub contribution data");
-        }
+        const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`);
+        if (!res.ok) throw new Error(`Primary API error ${res.status}`);
         const json = await res.json();
-        
-        const flatDays = (json.contributions || []).flat().map((day) => ({
-          date: day.date,
-          count: day.contributionCount || 0,
-          level: day.contributionLevel || "NONE",
+        if (!json.contributions?.length) throw new Error("Empty contributions list from primary API");
+
+        const flatDays = json.contributions.map((d) => ({
+          date: d.date,
+          count: d.count ?? 0,
+          level: d.level ?? 0,
         }));
 
-        // Take last 35 days (5 full weeks of 7 days) to match calendar grid alignment
-        const recent35Days = flatDays.slice(-35);
+        // Last 63 days (9 weeks of 7 days = last 2 months)
+        const last63Days = flatDays.slice(-63);
+        const liveData = {
+          contributions: last63Days,
+          totalContributions: json.total?.lastYear ?? json.total?.[new Date().getFullYear()] ?? 0,
+        };
 
-        setData({
-          contributions: recent35Days,
-          totalContributions: json.totalContributions || 0,
-        });
-      } catch (err) {
-        console.warn("GitHub API error, using cached fallback:", err.message);
-        // Realistic live data matching SudeepKagi's recent GitHub activity
-        const levels = ["NONE", "FIRST_QUARTILE", "SECOND_QUARTILE", "THIRD_QUARTILE", "FOURTH_QUARTILE"];
-        const counts = [0, 0, 0, 7, 5, 1, 31, 3, 11, 0, 0, 0, 0, 13, 1, 9, 30, 28, 0, 8, 1, 0, 0, 0, 0, 4, 8, 40, 8, 10, 0, 12, 15, 6, 2];
-        const fallbackContributions = Array.from({ length: 35 }, (_, i) => {
-          const count = counts[i % counts.length];
-          const levelIdx = count === 0 ? 0 : count > 25 ? 4 : count > 15 ? 3 : count > 5 ? 2 : 1;
-          return {
-            date: new Date(Date.now() - (34 - i) * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-            count,
-            level: levels[levelIdx],
-          };
-        });
+        if (isMounted) {
+          setData(liveData);
+          setIsLoading(false);
+          try {
+            localStorage.setItem(
+              `${CACHE_KEY}_${username}`,
+              JSON.stringify({ timestamp: Date.now(), data: liveData })
+            );
+          } catch {}
+        }
+        return;
+      } catch (primaryErr) {
+        console.warn("Primary GitHub API failed, attempting secondary API:", primaryErr.message);
+      }
 
-        setData({
-          contributions: fallbackContributions,
-          totalContributions: 493,
-        });
-      } finally {
-        setIsLoading(false);
+      // 2. Try Secondary Live API (rschristian)
+      try {
+        const res = await fetch(`https://gh-calendar.rschristian.dev/user/${username}`);
+        if (!res.ok) throw new Error(`Secondary API error ${res.status}`);
+        const json = await res.json();
+        if (!json.contributions?.length) throw new Error("Empty contributions list from secondary API");
+
+        const flatDays = json.contributions.flat().map((d) => ({
+          date: d.date,
+          count: d.count ?? 0,
+          level: Number(d.intensity) || 0,
+        }));
+
+        // Last 63 days (9 weeks of 7 days = last 2 months)
+        const last63Days = flatDays.slice(-63);
+        const liveData = {
+          contributions: last63Days,
+          totalContributions: json.total ?? 0,
+        };
+
+        if (isMounted) {
+          setData(liveData);
+          setIsLoading(false);
+          try {
+            localStorage.setItem(
+              `${CACHE_KEY}_${username}`,
+              JSON.stringify({ timestamp: Date.now(), data: liveData })
+            );
+          } catch {}
+        }
+        return;
+      } catch (secondaryErr) {
+        console.error("Secondary GitHub API also failed:", secondaryErr.message);
+        if (isMounted) {
+          setError("Failed to fetch live GitHub contributions");
+          setIsLoading(false);
+        }
       }
     }
 
-    fetchGitHubData();
+    fetchLiveContributions();
+
+    return () => {
+      isMounted = false;
+    };
   }, [username]);
 
   return { data, isLoading, error };

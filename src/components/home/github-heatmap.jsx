@@ -2,6 +2,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useEffect, useState, useMemo } from "react";
 
 const levelColors = {
+  0: "bg-zinc-100 dark:bg-neutral-800/50",
+  1: "bg-green-200 dark:bg-green-900/70",
+  2: "bg-green-400 dark:bg-green-700/80",
+  3: "bg-green-600 dark:bg-green-500/90",
+  4: "bg-green-700 dark:bg-green-400",
   NONE: "bg-zinc-100 dark:bg-neutral-800/50",
   FIRST_QUARTILE: "bg-green-200 dark:bg-green-900/70",
   SECOND_QUARTILE: "bg-green-400 dark:bg-green-700/80",
@@ -13,10 +18,10 @@ export function GitHubHeatmap({ contributions = [], isLoading = false }) {
   const [revealedIndices, setRevealedIndices] = useState(new Set());
 
   const placeholderData = useMemo(() => {
-    return Array.from({ length: 35 }, (_, i) => ({
-      date: new Date(Date.now() - (34 - i) * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+    return Array.from({ length: 63 }, (_, i) => ({
+      date: new Date(Date.now() - (62 - i) * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
       count: 0,
-      level: "NONE",
+      level: 0,
     }));
   }, []);
 
@@ -52,13 +57,13 @@ export function GitHubHeatmap({ contributions = [], isLoading = false }) {
   return (
     <TooltipProvider delayDuration={0}>
       <div className="flex items-center justify-center w-full h-full">
-        <div className="flex gap-1.5 sm:gap-1">
+        <div className="flex gap-1.5 sm:gap-1.5">
           {weeks.map((week, weekIndex) => (
-            <div key={weekIndex} className="flex flex-col gap-1.5 sm:gap-1">
+            <div key={weekIndex} className="flex flex-col gap-1.5 sm:gap-1.5">
               {week.map((day) => {
                 const currentIndex = flatIndex++;
                 const isRevealed = isLoading || revealedIndices.has(currentIndex);
-                const displayLevel = isRevealed ? day.level : "NONE";
+                const displayLevel = isRevealed ? (day.level ?? 0) : 0;
 
                 return (
                   <Tooltip key={day.date}>
@@ -69,8 +74,8 @@ export function GitHubHeatmap({ contributions = [], isLoading = false }) {
                         rel="noopener noreferrer"
                         aria-label="View GitHub profile"
                         className={`
-                          block w-3.5 h-3.5 sm:w-3 sm:h-3 rounded-[2px]
-                          ${levelColors[displayLevel]}
+                          block w-3.5 h-3.5 sm:w-3.5 sm:h-3.5 rounded-[2px]
+                          ${levelColors[displayLevel] || levelColors[0]}
                           transition-all duration-300
                           hover:scale-125
                           cursor-pointer

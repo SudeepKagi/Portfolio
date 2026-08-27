@@ -11,7 +11,6 @@ import {
   IconBrandGithub,
   IconBrandSpotifyFilled,
   IconRefresh,
-  IconCode,
 } from "@tabler/icons-react";
 import { Globe } from "@/components/ui/globe";
 import { NumberTicker } from "@/components/ui/number-ticker";
@@ -27,7 +26,6 @@ import { ScratchToReveal } from "@/components/ui/scratch-to-reveal";
 import { Spotlight } from "@/components/ui/spotlight";
 import { SpotlightGlow } from "@/components/ui/spotlight-glow";
 import { GitHubHeatmap } from "./github-heatmap";
-import { GFGHeatmap } from "./gfg-heatmap";
 import { SoundWave } from "@/components/ui/sound-wave";
 import { CustomCursor } from "@/components/ui/custom-cursor";
 import { useGitHub } from "@/hooks/useGitHub";
@@ -230,39 +228,11 @@ export default function Dashboard() {
         </GridItem>
 
         <GridItem
-          area="gfg"
-          icon={<IconCode className={dashboardIconClass} />}
-          title="GeeksforGeeks"
-          transitionDuration="700ms"
-          tooltip="Last 30 Days • sudeep327s"
-          cursorEmoji="🟢"
-        >
-          <div className="flex flex-col gap-[22px] sm:gap-6 h-full">
-            {/* Heatmap */}
-            <div className="flex-1">
-              <GFGHeatmap profileHandle="sudeep327s" />
-            </div>
-            {/* Legend */}
-            <div className="flex items-center justify-center gap-2 sm:gap-1.5 text-xs sm:text-[11px] text-neutral-400">
-              <span>Less</span>
-              <div className="flex gap-1 sm:gap-[3px]">
-                <div className="w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-[2px] bg-neutral-100 dark:bg-neutral-800/50" />
-                <div className="w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-[2px] bg-emerald-300 dark:bg-emerald-800/60" />
-                <div className="w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-[2px] bg-emerald-400 dark:bg-emerald-600/80" />
-                <div className="w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-[2px] bg-emerald-500 dark:bg-emerald-500" />
-                <div className="w-3 h-3 sm:w-2.5 sm:h-2.5 rounded-[2px] bg-emerald-600 dark:bg-emerald-400" />
-              </div>
-              <span>More</span>
-            </div>
-          </div>
-        </GridItem>
-
-        <GridItem
           area="github"
           icon={<IconBrandGithub className={dashboardIconClass} />}
           title="Activity"
-          transitionDuration="900ms"
-          tooltip="Last 30 Days"
+          transitionDuration="700ms"
+          tooltip="Last 2 Months"
           cursorEmoji="💻"
         >
           <div className="flex flex-col gap-[22px] sm:gap-6 h-full">

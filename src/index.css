@@ -213,7 +213,7 @@
   width: 100%;
   gap: 1rem;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: auto auto auto auto auto auto auto auto;
+  grid-template-rows: repeat(7, auto);
   grid-template-areas:
     "location location"
     "location location"
@@ -221,8 +221,7 @@
     "favorite music"
     "contact  music"
     "contact  scratch"
-    "github   github"
-    "gfg      gfg";
+    "github   github";
 }
 
 .dashboard-grid > li {
@@ -234,9 +233,9 @@
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: auto auto minmax(0, min-content) minmax(0, min-content);
     grid-template-areas:
-      "location location location location scratch  scratch  github github gfg gfg"
-      "location location location location scratch  scratch  github github gfg gfg"
+      "location location location location scratch  scratch  github github github github"
+      "location location location location scratch  scratch  github github github github"
       "music    music    music    music    music    favorite favorite favorite contact contact"
-      "tools    tools    tools    tools    tools    tools    tools  tools   contact contact";
+      "tools    tools    tools    tools    tools    tools    tools    tools    contact contact";
   }
 }
