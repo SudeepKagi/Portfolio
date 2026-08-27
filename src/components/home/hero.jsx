@@ -5,12 +5,7 @@ import { BlurFade } from "@/components/ui/blur-fade";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
 import { ShimmerBorder } from "@/components/ui/shimmer-border";
 import { IconArrowRight } from "@tabler/icons-react";
-import {
-  AnimatedName,
-  HOLD_MS,
-  INITIAL_REVEAL_MS,
-  SWAP_REVEAL_MS,
-} from "@/components/ui/animated-name";
+
 import {
   Tooltip,
   TooltipContent,
@@ -21,29 +16,6 @@ import { data } from "@/data/data";
 
 export default function Hero() {
   const [wiggleIcon, setWiggleIcon] = useState(null);
-  const [phase, setPhase] = useState("initial");
-  const WORDS = ["Sudeep", "a Developer", "a Builder", "a Problem Solver"];
-  const [wordIndex, setWordIndex] = useState(0);
-  const currentWord = WORDS[wordIndex];
-
-  useEffect(() => {
-    let timer;
-    if (phase === "initial") {
-      timer = setTimeout(() => setPhase("hold"), INITIAL_REVEAL_MS);
-    } else if (phase === "hold") {
-      timer = setTimeout(() => setPhase("exit"), HOLD_MS);
-    } else if (phase === "enter") {
-      timer = setTimeout(() => setPhase("hold"), SWAP_REVEAL_MS);
-    }
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [phase]);
-
-  const handleExitComplete = () => {
-    setWordIndex((prev) => (prev + 1) % WORDS.length);
-    setPhase("enter");
-  };
 
   const handleIconClick = (iconName) => {
     setWiggleIcon(iconName);
@@ -101,19 +73,16 @@ export default function Hero() {
               <BlurFade delay={0.005 * 1} inView>
                 <p className="z-50 subpixel-antialiased leading-[1.8] text-5xl sm:text-7xl font-bold text-center whitespace-nowrap">
                   <span className="inline-block pb-2 bg-gradient-to-b from-zinc-900 dark:from-zinc-50 to-zinc-700 dark:to-zinc-300 bg-clip-text text-transparent">
-                    Hi. I&#39;m{" "}
-                    <AnimatedName
-                      phase={phase}
-                      text={currentWord}
-                      onExitComplete={handleExitComplete}
-                      className="font-script font-normal text-[1.05em] leading-none align-baseline"
-                    />
+                    Hi, I am{" "}
+                    <span className="font-script font-normal text-[1.05em] leading-none align-baseline">
+                      Sudeep
+                    </span>
                   </span>
                 </p>
                 <p className="text-base subpixel-antialiased tracking-tight font-medium sm:text-2xl text-center text-secondary-foreground">
-                  A Full Stack Developer who builds{" "}
+                  Turning Ideas Into{" "}
                   <span className="font-script font-normal text-[1.05em] leading-none align-baseline text-secondary-foreground">
-                    under pressure
+                    Powerful Web Experiences
                   </span>
                   .
                 </p>

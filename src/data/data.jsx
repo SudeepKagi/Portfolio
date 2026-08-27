@@ -5,7 +5,7 @@ export const data = {
   name: "Sudeep Kagi",
   fullName: "Sudeep Shankaranand Kagi",
   nickname: "Sudeep",
-  tagline: "A Full Stack Developer who builds under pressure.",
+  tagline: "Turning Ideas Into Powerful Web Experiences.",
   location: "Bengaluru, India",
   email: "sudeepskagi@gmail.com",
   phone: "+91 9535030675",
