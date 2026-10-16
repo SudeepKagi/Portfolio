@@ -1,12 +1,12 @@
 # Sudeep Kagi — Full Stack Developer Portfolio
 
-Personal developer portfolio built with React 19, Vite, and Tailwind CSS. Showcases full-stack engineering projects, hackathon achievements, interactive live dashboards, and system implementations.
+A personal developer portfolio built with React 19, Vite, and Tailwind CSS. It showcases full-stack engineering projects, hackathon achievements, interactive live dashboards, and system implementations.
 
 **Live Site:** [https://ub-1089.vercel.app/](https://ub-1089.vercel.app/) *(or deployed portfolio URL)*
 
 ---
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - **Framework:** [React 19](https://react.dev/) + [Vite](https://vitejs.dev/)
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/) + OKLCH Design Tokens + CSS Variables
@@ -16,7 +16,7 @@ Personal developer portfolio built with React 19, Vite, and Tailwind CSS. Showca
 
 ---
 
-## 🛠️ Featured Projects
+## Featured Projects
 
 1. **NagrikSetu** — *AI-Classified Civic Grievance Platform*
    - Built at Utkarsh 2026 National Hackathon (Runner-Up of 120+ teams).
@@ -32,7 +32,7 @@ Personal developer portfolio built with React 19, Vite, and Tailwind CSS. Showca
 
 ---
 
-## 📦 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -64,6 +64,6 @@ npm run preview
 
 ---
 
-## 📄 License
+## License
 
 MIT © [Sudeep Kagi](https://github.com/SudeepKagi)
