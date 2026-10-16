@@ -2,7 +2,7 @@
 
 A personal developer portfolio built with React 19, Vite, and Tailwind CSS. It showcases full-stack engineering projects, hackathon achievements, interactive live dashboards, and system implementations.
 
-**Live Site:** [https://ub-1089.vercel.app/](https://ub-1089.vercel.app/) *(or deployed portfolio URL)*
+**Live Site:** [https://sudeep.pages.dev/](https://ub-1089.vercel.app/) *(or deployed portfolio URL)*
 
 ---
 
